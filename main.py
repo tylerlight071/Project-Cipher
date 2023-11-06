@@ -3,11 +3,13 @@ from colorama import Fore, Style
 import time
 from IPython.display import clear_output
 
-def print_slow(text, delay=0.05):
+
+def print_slow(text, delay=0.02):
     for char in text:
         print(char, end='', flush=True)
         time.sleep(delay)
     print()
+
 
 # Main function to start the game
 def main():
@@ -24,12 +26,10 @@ def main():
     # Print the game's intro and narrative
     print_slow(
         "\nYou are a skilled freelance hacker known only as 'Cipher'. You've been contracted by a mysterious client on the Dark Web to hack into the network of a powerful and secretive corporation known as 'Enigma Corp'. ")
-    print_slow(
-        "\nYour mission: to steal sensitive information and expose their secrets."),
+    print_slow("\nYour mission: to steal sensitive information and expose their secrets."),
     print_slow(
         "\nBut as you breach their defenses and delve deeper into their digital fortress, you stumble upon a dark and shocking secret that shakes you to your core.")
-    print_slow(
-        "\nYou realize that this mission is not just about money or revenge, it's about justice.")
+    print_slow("\nYou realize that this mission is not just about money or revenge, it's about justice.")
     print_slow(
         "\nTorn between your loyalty to your client and your moral compass, you must make a choice. Do you continue the mission as planned, or do you risk everything to uncover the truth and bring Enigma Corp to justice?")
     print_slow(
