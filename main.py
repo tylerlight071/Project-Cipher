@@ -3,13 +3,11 @@ from colorama import Fore, Style
 import time
 from IPython.display import clear_output
 
-
 def print_slow(text, delay=0.01):
     for char in text:
         print(char, end='', flush=True)
         time.sleep(delay)
     print()
-
 
 def main():
     colorama.init()
@@ -34,6 +32,8 @@ def main():
     print_slow(
         "\nThe choice is yours. But remember, in the world of hacking, nothing is as it seems, and trust is a rare commodity.")
     print_slow("\nLet's get started!")
+
+   
 
     # Pause for 2 seconds before clearing the console
     time.sleep(2)
@@ -62,10 +62,19 @@ def main():
         else:
             print_slow(Fore.RED + "\nInvalid choice, please try again." + Style.RESET_ALL)
 
-
 # Function to start the game
 def start_game():
     print_slow("\nStarting game...")
+    time.sleep(1)
+    print_slow("\nLoading assets...")
+    time.sleep(1)
+  # Print a hint message to the user
+    print_slow(Fore.MAGENTA + "\nHint:  Type'help' to get a list of available commands." + Style.RESET_ALL)
+    
+  
+  
+  
+  
 
     # Game command loop
     while True:
@@ -87,18 +96,15 @@ def start_game():
         else:
             print_slow("Invalid command, please try again.")
 
-
 # Function to connect to the network
 def connect():
     print_slow(Fore.YELLOW + "Connecting to Enigma Corps network..." + Style.RESET_ALL)
     # TODO: Implement hacking gameplay
 
-
 # Function to access the mail system
 def mail():
     print_slow(Fore.BLUE + "Mail System:" + Style.RESET_ALL)
     # TODO: Implement mail system
-
 
 # Function to display help message
 def help_user():
@@ -108,7 +114,6 @@ def help_user():
     print_slow("[Help] - Use the 'help' command if you need assistance at any time.")
     print_slow("[Exit] - Use the 'exit' command to return to the Main Menu.")
 
-
 # Run the main function when the script is executed
 if __name__ == "__main__":
-    main()
+  main()
