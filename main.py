@@ -376,6 +376,14 @@ def amy_system_command_loop(system):
             system.read_file(file_name)
         elif command.lower() == "mail":
             amy_mail()
+        elif command.lower() == "disconnect":
+            print_slow(Fore.YELLOW + "\nDisconnecting from system...")
+            print("")
+            time.sleep(1)
+            print_slow(Fore.YELLOW + "\nDisconnected ")
+            break
+        else:
+            print_slow(Fore.RED + "\nInvalid command, please try again." + Style.RESET_ALL)
 
 
 # Function to access Amy's mail system
