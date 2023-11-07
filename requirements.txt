@@ -1,2 +1,4 @@
 colorama~=0.4.6
 ipython~=8.17.2
+pip~=23.2.1
+pygame~=2.5.2
