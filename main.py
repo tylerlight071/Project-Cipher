@@ -1,8 +1,13 @@
-import pygame
+import os
+
 import colorama
 from colorama import Fore, Style
 import time
 from IPython.display import clear_output
+
+# Set the PYGAME_HIDE_SUPPORT_PROMPT environment variable
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "1"
+import pygame
 
 # Initialize pygame mixer
 pygame.mixer.init()
