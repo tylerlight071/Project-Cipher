@@ -25,51 +25,50 @@ inventory = []
 balance = 300
 emails = []
 has_read_email = False
+evidence = []
 amy_system = AmySystem()
 
 
 # Save the game state to a file
-# Save the game state to a file
 def save_game():
     global inventory, balance, emails, has_read_email  # Add has_read_email here
     with open('savegame.pkl', 'wb') as f:
-        pickle.dump((inventory, balance, emails, has_read_email), f)  # Add has_read_email here
+        pickle.dump((inventory, balance, emails, has_read_email, evidence), f)  # Add has_read_email here
 
 
 # Load the game state from a file
 def load_game():
-    global inventory, balance, emails, has_read_email  # Add has_read_email here
+    global inventory, balance, emails, has_read_email, evidence
     if os.path.exists('savegame.pkl'):
         with open('savegame.pkl', 'rb') as f:
-            inventory, balance, emails, has_read_email = pickle.load(f)  # Add has_read_email here
+            inventory, balance, emails, has_read_email, evidence = pickle.load(f)
     else:
         # If the savegame file doesn't exist, set the default values
         inventory = []
+        evidence = []
         balance = 300
         emails = [
             {
                 "sender": "Prophet",
-                "subject": "Prove Your Loyalty",
+                "subject": "Operation Enigma",
                 "body": (
-                    "Cipher, welcome to the ranks of the resistance. You've been chosen to join our clandestine operation against Enigma Corp, "
-                    "and your unique skills are crucial to our mission of exposing their "
-                    "\nsecrets and bringing them to justice."
-                    "\n\nTo demonstrate your allegiance, you must first acquire the 'EnigmaLink' application from the Hacker's Market. "
-                    "EnigmaLink is no ordinary tool—it contains a back door, covertly planted by our operatives, which"
-                    "\nwill grant you access to Enigma Corps servers."
-                    "\n\nUpon obtaining EnigmaLink, initiate your infiltration by using the 'connect' command. "
-                    "Once inside, navigate the labyrinth of their network, extracting any valuable intelligence that could tip the scales in "
-                    "\nour favor."
-                    "\n\nEvery piece of information you gather is vital to our cause, so be meticulous and thorough."
-                    "Your success is paramount, Cipher. The fate of our operation rests on your shoulders."
+                    "Cipher,\n\n"
+                    "Welcome to the resistance. This communication serves as your official contract initiation for Operation Enigma, a clandestine mission against Enigma Corp.\n\n"
+                    "Your unique skills have been identified and selected for this critical operation. Your objective is to expose the secrets of Enigma Corp and hold them accountable for their actions.\n\n"
+                    "Your first task under this contract is to acquire a specialized tool known as 'EnigmaLink' from the Hacker's Market. "
+                    "This application contains a hidden backdoor, strategically planted by our operatives, which will grant you access to Enigma Corps servers.\n\n"
+                    "Once you have secured EnigmaLink, initiate your infiltration by using the 'connect' command. "
+                    "Your mission is to navigate through the network, collecting any valuable intelligence that could be crucial to our cause.\n\n"
+                    "Begin your investigation with an employee named Amy. We have managed to obtain her password through unconventional means. "
+                    "Use 'sexinthecity' to access her computer and gather any pertinent information.\n\n"
+                    "All collected data is considered highly confidential and vital to the success of this operation. "
+                    "You are expected to be thorough and meticulous in your investigation.\n\n"
+                    "This contract is binding, and your success is paramount. The future of our operation and cause rests upon your shoulders. Execute with precision and diligence.\n\n"
+                    "Best of luck, Cipher.\n"
+                    "May the odds be in your favor."
                 )
             },
         ]
-        has_read_email = False
-
-
-# Initialize the user's inventory and balance
-load_game()
 
 
 # Function to add an item to the inventory
@@ -80,6 +79,14 @@ def add_to_inventory(item):
 # Function to check if an item is in the inventory
 def has_item(item):
     return item in inventory
+
+
+def add_evidence(evidence_item):
+    evidence.append(evidence_item)
+
+
+def has_evidence(evidence_item):
+    return evidence_item in evidence
 
 
 # Makes the text have a delay of (x) when printed to screen
@@ -121,6 +128,8 @@ def main():
 
     # Clear the console
     clear_output(wait=True)
+
+    load_game()
 
     # Main menu loop
     while True:
@@ -169,15 +178,33 @@ def print_balance():
 
 def read_email(emails, subject):
     global has_read_email
+    email_found = False
     for email in emails:
         if email['subject'].lower() == subject.lower():
+            email_found = True
             # If the email is from Prophet, set has_read_email to True
             if email['sender'].lower() == 'prophet':
                 has_read_email = True
             print_slow(
                 Fore.LIGHTBLUE_EX + f"\nFrom: {email['sender']}\nSubject: {email['subject']}\n\n{email['body']}" + Style.RESET_ALL)
-            return
-    print_slow(Fore.RED + "\nNo email found with that subject, please try again." + Style.RESET_ALL)
+
+            if email['subject'].lower() == "can't stop thinking about you" and email['sender'].lower() == "prophet":
+                evidence_item = "evidence_1"
+                if not has_evidence(evidence_item):
+                    print("Adding evidence to the list...")
+                    print("")
+                    print("")
+                    print_slow(Fore.GREEN + "Evidence Secured" + Style.RESET_ALL)
+                    # Add new email to emails list
+                    new_email = {
+                        "sender": "Anonymous",
+                        "subject": "Good start",
+                        "body": "Congratulations on securing the evidence. Here's a small reward to help you on your journey. Keep up the good work!"
+                    }
+                    emails.append(new_email)
+
+    if not email_found:
+        print_slow(Fore.RED + "\nNo email found with that subject, please try again." + Style.RESET_ALL)
 
 
 # List of available upgrades
@@ -213,6 +240,7 @@ def shop():
 
         # Buy the chosen upgrade
         if command.lower() == 'exit':
+            print_slow(Fore.YELLOW + "\nExiting Hacker's Market" + Style.RESET_ALL)
             break
         elif command.lower() == 'help':
             shop_help()
@@ -277,6 +305,7 @@ def start_game():
 def connect():
     if has_item("EnigmaLink"):
         print_slow(Fore.GREEN + "Connecting to Enigma Corps network using EnigmaLink..." + Style.RESET_ALL)
+        time.sleep(0.5)
         print_slow(Fore.GREEN + "Establishing connection...")
         time.sleep(1)
         print_slow(Fore.GREEN + "Linking EnigmaLink to remote server...")
@@ -376,6 +405,8 @@ def amy_system_command_loop(system):
             system.read_file(file_name)
         elif command.lower() == "mail":
             amy_mail()
+        elif command.lower() == "help":
+            system_help()
         elif command.lower() == "disconnect":
             print_slow(Fore.YELLOW + "\nDisconnecting from system...")
             print("")
