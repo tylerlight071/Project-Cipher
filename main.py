@@ -195,13 +195,9 @@ def read_email(emails, subject):
                     print("")
                     print("")
                     print_slow(Fore.GREEN + "Evidence Secured" + Style.RESET_ALL)
-                    # Add new email to emails list
-                    new_email = {
-                        "sender": "Anonymous",
-                        "subject": "Good start",
-                        "body": "Congratulations on securing the evidence. Here's a small reward to help you on your journey. Keep up the good work!"
-                    }
-                    emails.append(new_email)
+                    # Add £20 to the user's balance
+                    add_money(20)
+                    print_slow(Fore.GREEN + "\n£20 has been transferred to your bank." + Style.RESET_ALL)
 
     if not email_found:
         print_slow(Fore.RED + "\nNo email found with that subject, please try again." + Style.RESET_ALL)
