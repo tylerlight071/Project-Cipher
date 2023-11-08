@@ -4,6 +4,8 @@ import colorama
 from colorama import Fore, Style
 import time
 from IPython.display import clear_output
+
+from systems.level_1.billy_system import BillySystem
 from systems.level_1.amy_system import AmySystem
 
 # Set the PYGAME_HIDE_SUPPORT_PROMPT environment variable
@@ -25,23 +27,27 @@ inventory = []
 balance = 300
 emails = []
 has_read_email = False
+has_read_file = False
 evidence = []
 amy_system = AmySystem()
+billy_system = BillySystem()
+triggered_emails = []
 
 
 # Save the game state to a file
 def save_game():
-    global inventory, balance, emails, has_read_email  # Add has_read_email here
+    global inventory, balance, emails, has_read_email, evidence, triggered_emails  # Add has_read_email here
     with open('savegame.pkl', 'wb') as f:
-        pickle.dump((inventory, balance, emails, has_read_email, evidence), f)  # Add has_read_email here
+        pickle.dump((inventory, balance, emails, has_read_email, evidence, triggered_emails),
+                    f)  # Add has_read_email here
 
 
 # Load the game state from a file
 def load_game():
-    global inventory, balance, emails, has_read_email, evidence
+    global inventory, balance, emails, has_read_email, evidence, triggered_emails
     if os.path.exists('savegame.pkl'):
         with open('savegame.pkl', 'rb') as f:
-            inventory, balance, emails, has_read_email, evidence = pickle.load(f)
+            inventory, balance, emails, has_read_email, evidence, triggered_emails = pickle.load(f)
     else:
         # If the savegame file doesn't exist, set the default values
         inventory = []
@@ -68,6 +74,46 @@ def load_game():
                     "May the odds be in your favor."
                 )
             },
+        ]
+        triggered_emails = [
+            {
+                "sender": "Prophet",
+                "recipient": "Cipher",
+                "subject": "First Piece of Evidence",
+                "body": "Good start, but we already have that information."
+                        "\nI have transferred you £20 for your troubles."
+                        "\n\nKeep digging Cipher!",
+                "evidence_required": 1
+            },
+            {
+                "sender": "Anonymous",
+                "recipient": "Cipher",
+                "subject": "Second Piece of Evidence",
+                "body": "Great job! You've found your second piece of evidence.",
+                "evidence_required": 2
+            },
+            {
+                "sender": "Anonymous",
+                "recipient": "Cipher",
+                "subject": "Third Piece of Evidence",
+                "body": "Fantastic! You've uncovered the third piece of evidence.",
+                "evidence_required": 3
+            },
+            {
+                "sender": "Anonymous",
+                "recipient": "Cipher",
+                "subject": "Fourth Piece of Evidence",
+                "body": "Excellent work! You've obtained the fourth piece of evidence.",
+                "evidence_required": 4
+            },
+            {
+                "sender": "Anonymous",
+                "recipient": "Cipher",
+                "subject": "Fifth Piece of Evidence",
+                "body": "Outstanding! You've secured the fifth piece of evidence.",
+                "evidence_required": 5
+            }
+            # Add more emails here as needed
         ]
 
 
@@ -176,8 +222,53 @@ def print_balance():
     print(f"Your current balance is: £{get_balance()}")
 
 
-def read_email(emails, subject):
-    global has_read_email
+def read_file(file_content, file_name, evidence_list):
+    global has_read_file, evidence
+    global balance
+
+    # Print the file content
+    print_slow(Fore.LIGHTBLUE_EX + f"\n{file_name}:\n\n{file_content}" + Style.RESET_ALL)
+
+    # Check if the file is one of the specific files that increases evidence count
+    if file_name.lower() in ["employee_performance_review.txt"]:
+        evidence_item = 4
+        if not has_evidence(evidence_item):
+            add_evidence(evidence_item)
+            print("Adding evidence to the list...")
+            print("")
+            print_slow(Fore.GREEN + "Evidence Secured" + Style.RESET_ALL)
+
+    if file_name.lower() in ["meeting_minutes.txt"]:
+        evidence_item = 5
+        if not has_evidence(evidence_item):
+            add_evidence(evidence_item)
+            print("Adding evidence to the list...")
+            print("")
+            print_slow(Fore.GREEN + "Evidence Secured" + Style.RESET_ALL)
+
+    # Add more file names here as needed
+
+    # Add money to balance based on the file name
+    if file_name.lower() == "employee_performance_review.txt":
+        balance += 30
+    elif file_name.lower() == "meeting_minutes.txt":
+        balance += 50
+
+    # Print the updated balance
+    print_balance()
+
+    # Check the evidence count and display the triggered emails
+    for triggered_email in reversed(evidence_list):
+        if len(evidence) >= triggered_email['evidence_required']:
+            time.sleep(3)
+            print_slow(
+                Fore.MAGENTA + f"\nFrom: {triggered_email['sender']}\nTo: {triggered_email['recipient']}\nSubject: {triggered_email['subject']}\n\n{triggered_email['body']}" + Style.RESET_ALL)
+            break
+
+
+def read_email(emails, subject, triggered_emails):
+    global has_read_email, evidence
+    global balance  # Add this line to access the global balance variable
     email_found = False
     for email in emails:
         if email['subject'].lower() == subject.lower():
@@ -188,16 +279,50 @@ def read_email(emails, subject):
             print_slow(
                 Fore.LIGHTBLUE_EX + f"\nFrom: {email['sender']}\nSubject: {email['subject']}\n\n{email['body']}" + Style.RESET_ALL)
 
-            if email['subject'].lower() == "can't stop thinking about you" and email['sender'].lower() == "prophet":
-                evidence_item = "evidence_1"
+            # Check if the email is one of the specific emails that increases evidence count
+            if email['subject'].lower() in ["project update"]:
+                evidence_item = 3
+                if not has_evidence(evidence_item):
+                    add_evidence(evidence_item)
+                    print("Adding evidence to the list...")
+                    print("")
+                    print_slow(Fore.GREEN + "Evidence Secured" + Style.RESET_ALL)
+
+            if email['subject'].lower() in ["professional development"]:
+                evidence_item = 2
+                if not has_evidence(evidence_item):
+                    add_evidence(evidence_item)
+                    print("Adding evidence to the list...")
+                    print("")
+                    print_slow(Fore.GREEN + "Evidence Secured" + Style.RESET_ALL)
+
+            if email['subject'].lower() == "can't stop thinking about you" and email['sender'].lower() == 'amy':
+                evidence_item = 1
                 if not has_evidence(evidence_item):
                     print("Adding evidence to the list...")
                     print("")
                     print("")
                     print_slow(Fore.GREEN + "Evidence Secured" + Style.RESET_ALL)
-                    # Add £20 to the user's balance
-                    add_money(20)
-                    print_slow(Fore.GREEN + "\n£20 has been transferred to your bank." + Style.RESET_ALL)
+                    add_evidence(evidence_item)
+
+                    # Add money to balance based on the email subject
+            if email['subject'].lower() == "professional development":
+                balance += 30
+            elif email['subject'].lower() == "project update":
+                balance += 50
+            elif email['subject'].lower() == "can't stop thinking about you":
+                balance += 20
+
+            # Print the updated balance
+            print_balance()
+
+            # Check the evidence count and display the triggered emails
+            for triggered_email in reversed(triggered_emails):
+                if len(evidence) >= triggered_email['evidence_required']:
+                    time.sleep(3)
+                    print_slow(
+                        Fore.MAGENTA + f"\nFrom: {triggered_email['sender']}\nTo: {triggered_email['recipient']}\nSubject: {triggered_email['subject']}\n\n{triggered_email['body']}" + Style.RESET_ALL)
+                    break
 
     if not email_found:
         print_slow(Fore.RED + "\nNo email found with that subject, please try again." + Style.RESET_ALL)
@@ -354,7 +479,7 @@ def mail():
         elif command.lower().startswith('r '):
             # Read email
             subject = command[2:]
-            read_email(emails, subject)
+            read_email(emails, subject, triggered_emails)
         elif command.lower() == 'help':
             # Display mail help message
             mail_help()
@@ -398,7 +523,9 @@ def amy_system_command_loop(system):
             system.list_files()
         elif command.lower().startswith("r "):
             file_name = command[2:]
-            system.read_file(file_name)
+            file_content = system.read_file(file_name)  # Store the file content in a variable
+            if file_content:  # Check if the file was found
+                read_file(file_content, file_name, triggered_emails)  # Pass the file content to the read_file function
         elif command.lower() == "mail":
             amy_mail()
         elif command.lower() == "help":
@@ -427,7 +554,59 @@ def amy_mail():
         elif command.lower().startswith('r '):
             # Read email
             subject = command[2:]
-            read_email(amy_system.emails, subject)
+            read_email(amy_system.emails, subject, triggered_emails)
+        elif command.lower() == 'help':
+            # Display mail help message
+            mail_help()
+        elif command.lower() == 'exit':
+            # Exit mail system
+            print_slow(Fore.LIGHTBLUE_EX + "\nExiting Mail System..." + Style.RESET_ALL)
+            break
+        else:
+            print_slow(Fore.RED + "\nInvalid command, please try again." + Style.RESET_ALL)
+
+
+def billy_system_command_loop(system):
+    print_slow(Fore.YELLOW + "Connected to Billy's system." + Style.RESET_ALL)
+
+    while True:
+        command = input(Fore.YELLOW + "> " + Style.RESET_ALL)
+
+        if command.lower() == "l":
+            system.list_files()
+        elif command.lower().startswith("r "):
+            file_name = command[2:]
+            file_content = system.read_file(file_name)  # Store the file content in a variable
+            if file_content:  # Check if the file was found
+                read_file(file_content, file_name, triggered_emails)  # Pass the file content to the read_file function
+        elif command.lower() == "mail":
+            billy_mail()
+        elif command.lower() == "help":
+            system_help()
+        elif command.lower() == "disconnect":
+            print_slow(Fore.YELLOW + "\nDisconnecting from system...")
+            print("")
+            time.sleep(1)
+            print_slow(Fore.YELLOW + "\nDisconnected ")
+            break
+        else:
+            print_slow(Fore.RED + "\nInvalid command, please try again." + Style.RESET_ALL)
+
+
+def billy_mail():
+    print_slow(Fore.LIGHTBLUE_EX + "Billy's Mail System:" + Style.RESET_ALL)
+
+    while True:
+        command = input(
+            Fore.LIGHTBLUE_EX + "\n> " + Style.RESET_ALL)
+
+        if command.lower() == 'l':
+            # List emails
+            list_emails(billy_system.emails)
+        elif command.lower().startswith('r '):
+            # Read email
+            subject = command[2:]
+            read_email(billy_system.emails, subject, triggered_emails)
         elif command.lower() == 'help':
             # Display mail help message
             mail_help()
@@ -450,6 +629,8 @@ def hack(system_name):
                 print_slow(Fore.GREEN + "Access granted!" + Style.RESET_ALL)
                 if system['name'] == 'Amy':
                     amy_system_command_loop(amy_system)
+                if system['name'] == 'Billy':
+                    billy_system_command_loop(billy_system)
                 else:
                     # TODO: Implement other system interactions
                     pass

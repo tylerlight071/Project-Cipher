@@ -1,5 +1,3 @@
-# amy_system.py
-
 class AmySystem:
     def __init__(self):
         self.files = [
@@ -124,10 +122,10 @@ class AmySystem:
                 "sender": "Amy",
                 "subject": "Request for Time Off",
                 "body": (
-                    "Hi Kyle,\n\n"
-                    "I hope this email finds you well. I wanted to request some time off next month for a family vacation. I am planning to be out of the office from [start date] to [end date].\n\n"
+                    "Good Afternoon Katie,\n\n"
+                    "I hope this email finds you well. I wanted to request some time off next month for a family vacation. I am planning to be out of the office from 10/09/2024 to 18/09/2024\n\n"
                     "I have been working hard on the Johnson project and have made significant progress. I will make sure to finish up any outstanding work and hand off any ongoing projects to my colleagues before I leave. I will also be available by email in case of any urgent matters.\n\n"
-                    "I understand that this is a busy time for the team, and I want to ensure that my absence doesn't cause any disruptions. I have already spoken to [Colleague's Name] and [Colleague's Name], and they have kindly agreed to cover for me while I'm away.\n\n"
+                    "I understand that this is a busy time for the team, and I want to ensure that my absence doesn't cause any disruptions. I have already spoken to Markus and he has kindly agreed to cover for me while I'm away.\n\n"
                     "Thank you for considering my request. I look forward to spending some quality time with my family and coming back to work refreshed and recharged. I am confident that the time off will help me come back with renewed energy and focus.\n\n"
                     "Best,\n"
                     "Amy"
@@ -137,7 +135,7 @@ class AmySystem:
                 "sender": "Amy",
                 "subject": "Apology for the Mistake",
                 "body": (
-                    "Hi Katie,\n\n"
+                    "Good Morning Kyle,\n\n"
                     "I hope this email finds you well. I wanted to reach out and apologize for the mistake I made on the Johnson report. I realize now that I overlooked some important data, and I take full responsibility for it.\n\n"
                     "I have gone back and corrected the report, and I will make sure to double-check my work in the future to avoid any similar mistakes. I have also attached the updated report for your reference.\n\n"
                     "I understand if you are disappointed or frustrated, and I am more than willing to do whatever it takes to make it right. Please let me know if there's anything else I can do to fix this,"
@@ -151,7 +149,7 @@ class AmySystem:
                 "sender": "Amy",
                 "subject": "Thank You for Letting Me Use Your Computer",
                 "body": (
-                    "Hi Billy,\n\n"
+                    "Hey Billy,\n\n"
                     "I wanted to take a moment to express my gratitude for allowing me to use your computer while mine was being serviced by IT. "
                     "It was a huge help and allowed me to stay productive during that time.\n\n"
                     "I also noticed that your password is 'football'. While I understand it's easy to remember, it's important to choose\n"
@@ -170,11 +168,15 @@ class AmySystem:
             print(f"\n{file['name']}")
 
     def read_file(self, file_name):
+        file_found = False
         for file in self.files:
             if file['name'] == file_name:
-                print(f"\nReading {file_name}...\n\n{file['name']}:\n{file['content']}")
-                return
-        print("\nFile not found! Please try again.")
+                file_found = True
+                return file['content']
+
+        if not file_found:
+            print("\nNo file found with that name, please try again.")
+            return None
 
     def list_emails(self):
         print("\nEmails:")
