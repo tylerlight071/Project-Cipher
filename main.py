@@ -329,10 +329,10 @@ def read_email(emails, subject, triggered_emails):
 
 
 # List of available upgrades
+# List of available upgrades
 upgrades = [
     {"name": "EnigmaLink", "description": "Application required to connect to Enigma Corps network.", "price": 300},
-    {"name": "Stealth Mode", "description": "Makes your hacks undetectable.", "price": 200},
-    {"name": "Firewall Bypass", "description": "Allows you to bypass firewalls easily.", "price": 300}
+    {"name": "CodeShatter", "description": "A powerful password breaker that can crack even the strongest passwords.", "price": 200}  # Add the CodeShatter upgrade here
 ]
 
 
