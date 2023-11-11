@@ -5,6 +5,8 @@ from colorama import Fore, Style
 import time
 from IPython.display import clear_output
 
+from systems.level_1.markus_system import MarkusSystem
+#TODO implement Markus system to script
 from systems.level_1.billy_system import BillySystem
 from systems.level_1.amy_system import AmySystem
 
