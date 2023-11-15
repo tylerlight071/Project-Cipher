@@ -6,7 +6,7 @@ import time
 from IPython.display import clear_output
 
 from systems.level_1.markus_system import MarkusSystem
-#TODO implement Markus system to script
+# TODO implement Markus system to script
 from systems.level_1.billy_system import BillySystem
 from systems.level_1.amy_system import AmySystem
 
@@ -334,7 +334,8 @@ def read_email(emails, subject, triggered_emails):
 # List of available upgrades
 upgrades = [
     {"name": "EnigmaLink", "description": "Application required to connect to Enigma Corps network.", "price": 300},
-    {"name": "CodeShatter", "description": "A powerful password breaker that can crack even the strongest passwords.", "price": 200}  # Add the CodeShatter upgrade here
+    {"name": "CodeShatter", "description": "A powerful password breaker that can crack even the strongest passwords.",
+     "price": 200}  # Add the CodeShatter upgrade here
 ]
 
 
