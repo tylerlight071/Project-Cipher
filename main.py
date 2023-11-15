@@ -335,7 +335,9 @@ def read_email(emails, subject, triggered_emails):
 upgrades = [
     {"name": "EnigmaLink", "description": "Application required to connect to Enigma Corps network.", "price": 300},
     {"name": "CodeShatter", "description": "A powerful password breaker that can crack even the strongest passwords.",
-     "price": 200}  # Add the CodeShatter upgrade here
+     "price": 200},
+    {"name": "EyeSpy", "description": "A privacy breaker to gain access to the smallest of cameras.", "price": 500},
+    {"name": "Rift", "description": "Break the barrier between the Server and Network.", "price": 800}
 ]
 
 
