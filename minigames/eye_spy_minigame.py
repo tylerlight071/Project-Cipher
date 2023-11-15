@@ -1,4 +1,5 @@
 import random
+from colorama import Fore, Style
 
 def generate_ports(num_ports):
     open_ports = set(random.sample(range(1, num_ports + 1), random.randint(1, num_ports // 2)))
@@ -13,14 +14,23 @@ def port_scanning():
     scan_attempts = 2
 
     print("Welcome to the Port Scanning minigame!")
-    print(f"Find the open ports in the range 1-{num_ports}. You have {attempts} attempts.")
+    print("")
+    print(f"Find the open ports in the range 1-{num_ports}.")
+    print("")
+    print(f"You have {attempts} attempts.")
+    print("")
 
     while scan_attempts > 0:
+        print("")
         print(f"\nYou have {scan_attempts} scan attempts left.")
+        print("")
         start = int(input("Enter the start of the range to scan: "))
+        print("")
         end = int(input("Enter the end of the range to scan: "))
+        print("")
 
         num_open_ports_in_range = len(open_ports.intersection(range(start, end + 1)))
+        print("")
         print(f"There are {num_open_ports_in_range} open ports in the range {start}-{end}.")
 
         scan_attempts -= 1
@@ -29,11 +39,11 @@ def port_scanning():
         port = int(input("\nEnter a port number to guess: "))
 
         if port in open_ports:
-            print("Port is open!")
+            print(Fore.GREEN + "Port is open!" + Style.RESET_ALL)
             open_ports.remove(port)
             correct_guesses += 1
         elif port in closed_ports:
-            print("Port is closed.")
+            print(Fore.RED + "Port is closed." + Style.RESET_ALL)
             closed_ports.remove(port)
         else:
             print("Invalid port number. Please enter a number between 1 and", num_ports)
@@ -41,8 +51,8 @@ def port_scanning():
         attempts -= 1
 
     if len(open_ports) == 0:
-        print("\nCongratulations! You have successfully found all the open ports and gained access to the camera.")
+        print(Fore.GREEN + "\nCongratulations! You have successfully found all the open ports and gained access to the camera." + Style.RESET_ALL)
     else:
-        print(f"\nGame Over! You found {correct_guesses} out of {len(open_ports) + correct_guesses} open ports.")
+        print(Fore.RED + f"\nGame Over! You found {correct_guesses} out of {len(open_ports) + correct_guesses} open ports." + Style.RESET_ALL)
 
 port_scanning()
