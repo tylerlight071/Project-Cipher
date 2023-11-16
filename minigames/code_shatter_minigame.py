@@ -1,7 +1,9 @@
 import random
 from colorama import Fore, Style
 
+
 def code_shatter_minigame():
+    print("Debug: Entering CodeShatter MiniGame")
     # Generate a random 5-digit number
     target = [str(random.randint(1, 9)) for _ in range(5)]
 
@@ -17,10 +19,9 @@ def code_shatter_minigame():
     print("")
     print(Fore.RED + "Red: Incorrect digit." + Style.RESET_ALL)
     print("")
-  
 
     attempts = 0
-    while attempts < 10:
+    while attempts < 7:
         # Get the user's guess
         guess = input("Enter your guess: ")
 
@@ -44,9 +45,9 @@ def code_shatter_minigame():
 
         # Check if the guess is correct
         if guess == "".join(target):
-            print("Congratulations! You guessed the correct number!")
+            print(Fore.GREEN + "Access granted." + Style.RESET_ALL)
             break
     else:
-        print("Sorry, you've run out of attempts. The correct number was " + "".join(target) + ".")
+        print(Fore.RED + "Access denied. Too many attempts." + Style.RESET_ALL)
 
 code_shatter_minigame()

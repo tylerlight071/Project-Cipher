@@ -5,6 +5,8 @@ from colorama import Fore, Style
 import time
 from IPython.display import clear_output
 
+from minigames.code_shatter_minigame import code_shatter_minigame
+
 from systems.level_1.markus_system import MarkusSystem
 from systems.level_1.billy_system import BillySystem
 from systems.level_1.amy_system import AmySystem
@@ -54,7 +56,7 @@ def load_game():
         # If the savegame file doesn't exist, set the default values
         inventory = []
         evidence = []
-        balance = 300
+        balance = 30000
         emails = [
             {
                 "sender": "Prophet",
@@ -681,25 +683,32 @@ def hack(system_name):
     system = next((s for s in all_systems if s['name'].lower() == system_name.lower()), None)
     if system:
         if system['level'] <= player_level:
-            # Prompt the user for the password
-            password = input("Enter password: ")
-            if password == system['password']:
-                print_slow(Fore.GREEN + "Access granted!" + Style.RESET_ALL)
-                if system['name'] == 'Amy':
-                    amy_system_command_loop(amy_system)
-                if system['name'] == 'Billy':
-                    billy_system_command_loop(billy_system)
-                if system['name'] == 'Markus':
-                    markus_system_command_loop(markus_system)
-                else:
-                    # TODO: Implement other system interactions
-                    pass
+            # Check for CodeShatter before prompting for password
+            if system['name'] == 'Markus' and has_item("CodeShatter"):
+                code_shatter_minigame()
+                markus_system_command_loop(markus_system)
             else:
-                print_slow(Fore.RED + "Access denied! Incorrect password." + Style.RESET_ALL)
+                # Prompt the user for the password
+                password = input("Enter password: ")
+                if password == system['password']:
+                    print_slow(Fore.GREEN + "Access granted!" + Style.RESET_ALL)
+                    if system['name'] == 'Amy':
+                        amy_system_command_loop(amy_system)
+                    elif system['name'] == 'Billy':
+                        billy_system_command_loop(billy_system)
+                    elif system['name'] == 'Markus':
+                        # No need to check for CodeShatter again, as it's done above
+                        markus_system_command_loop(markus_system)
+                    else:
+                        # Add more conditions for other systems
+                        pass
+                else:
+                    print_slow(Fore.RED + "Access denied! Incorrect password." + Style.RESET_ALL)
         else:
             print_slow(Fore.RED + "Access denied! This system is locked." + Style.RESET_ALL)
     else:
         print_slow(Fore.RED + "System not found! Please try again." + Style.RESET_ALL)
+
 
 
 def scan():
