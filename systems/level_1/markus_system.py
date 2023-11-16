@@ -2,62 +2,68 @@ class MarkusSystem:
     def __init__(self):
     self.files = [
         {
-            "name": "system_log.txt",
-            "content": (
-                "System Log for Enigma Corps\n\n"
-                "Date: [Timestamp]\n"
-                "Event Type: [Event Type]\n"
-                "Description: [Description of the event]\n\n"
-                "Date: [Timestamp]\n"
-                "Event Type: [Event Type]\n"
-                "Description: [Description of the event]\n\n"
-                "Date: [Timestamp]\n"
-                "Event Type: [Event Type]\n"
-                "Description: [Description of the event]\n\n"
-                "This system log provides a record of important events and activities on Enigma Corps systems for troubleshooting and analysis."
-            )
-        },
+    "name": "system_log.txt",
+    "content": (
+        "Enigma Corps System Log\n\n"
+        "Date: 2023-11-16 08:00 AM\n"
+        "Event Type: System Startup\n"
+        "Description: The Enigma Corps systems smoothly initiated startup procedures, ensuring a seamless beginning to the workday.\n\n"
+        "Date: 2023-11-16 10:30 AM\n"
+        "Event Type: Network Upgrade\n"
+        "Description: Implemented a network upgrade to enhance data transfer speeds, providing improved efficiency across departments.\n\n"
+        "Date: 2023-11-16 01:45 PM\n"
+        "Event Type: Security Patch Applied\n"
+        "Description: Critical security patch successfully applied to safeguard against potential vulnerabilities, ensuring system integrity.\n\n"
+        "Date: 2023-11-16 04:20 PM\n"
+        "Event Type: Server Maintenance\n"
+        "Description: Conducted routine maintenance on Enigma Corps servers, optimizing performance and minimizing downtime.\n\n"
+        "This dynamic system log captures key events, from the smooth startup of the day to network upgrades, security enhancements, and routine maintenance. It serves as a valuable record for troubleshooting and analysis, ensuring the optimal functionality of Enigma Corps systems."
+    )
+},
         {
-            "name": "technical_documentation.docx",
-            "content": (
-                "Technical Documentation for Enigma Corps System\n\n"
-                "1. System Architecture\n"
-                "2. Network Configuration\n"
-                "3. Security Protocols\n"
-                "4. Troubleshooting Guide\n"
-                "5. Software Installation Procedures\n"
-                "6. Hardware Specifications\n\n"
-                "This documentation provides comprehensive information about the Enigma Corps system for reference and troubleshooting purposes."
-            )
-        },
+    "name": "technical_documentation.docx",
+    "content": (
+        "Enigma Corps System Technical Documentation\n\n"
+        "1. System Architecture:\n"
+        "   - Overview of the system's structural design and components.\n\n"
+        "2. Network Configuration:\n"
+        "   - Details on the configuration of Enigma Corps' network setup for efficient communication.\n\n"
+        "3. Security Protocols:\n"
+        "   - Comprehensive overview of security measures and protocols implemented to safeguard sensitive data.\n\n"
+        "4. Troubleshooting Guide:\n"
+        "   - Step-by-step guide for identifying and resolving common issues to ensure seamless system functionality.\n\n"
+        "5. Software Installation Procedures:\n"
+        "   - Instructions for installing and updating software components within the Enigma Corps system.\n\n"
+        "6. Hardware Specifications:\n"
+        "   - Detailed specifications of the hardware components utilized in the Enigma Corps infrastructure.\n\n"
+        "This meticulously crafted technical documentation serves as a go-to resource for understanding the Enigma Corps system, covering everything from its architecture and network configuration to security protocols, troubleshooting, and hardware specifications. It's an invaluable reference for maintaining optimal system performance."
+    )
+},
         {
-            "name": "network_diagram.png",
-            "content": "Image file depicting the network architecture of Enigma Corps, detailing server locations, firewalls, and network connections."
-        },
+    "name": "passwords.txt",
+    "content": (
+        "Sensitive Password Information for Enigma Corps\n\n"
+        "Admin Password: *********\n"
+        "Database Password: *********\n"
+        "Router Password: *********\n"
+        "WiFi Password: *********\n"
+        "Encryption Key: *********\n\n"
+        "Warning: This file contains confidential information. Keep it secure, and refrain from sharing passwords without explicit authorization. Safeguarding this information is crucial to maintaining the security and integrity of the Enigma Corps systems."
+    )
+},
         {
-            "name": "passwords.txt",
-            "content": (
-                "Admin Password: *********\n"
-                "Database Password: *********\n"
-                "Router Password: *********\n"
-                "WiFi Password: *********\n"
-                "Encryption Key: *********\n\n"
-                "Note: Keep this file secure and do not share passwords without proper authorization."
-            )
-        },
-        {
-            "name": "software_inventory.csv",
-            "content": (
-                "Software Inventory for Enigma Corps\n\n"
-                "Software Name, Version, License Key\n"
-                "1. Enigma Security Suite, v2.0, XXXX-XXXX-XXXX-XXXX\n"
-                "2. DataGuard Backup, v1.5, YYYY-YYYY-YYYY-YYYY\n"
-                "3. Office Suite, v2022, ZZZZ-ZZZZ-ZZZZ-ZZZZ\n"
-                "4. VPN Client, v3.1, WWWW-WWWW-WWWW-WWWW\n"
-                "5. Project Management Tool, v4.2, VVVV-VVVV-VVVV-VVVV\n\n"
-                "This inventory tracks the software used across Enigma Corps systems."
-            )
-        }
+    "name": "software_inventory.csv",
+    "content": (
+        "Software Inventory for Enigma Corps\n\n"
+        "Software Name, Version, License Key\n"
+        "1. Enigma Security Suite, v2.0, X1Y2Z3A4-B5C6D7E8-F9G0H1I2\n"
+        "2. DataGuard Backup, v1.5, Y3X2W1V0-U9T8S7R6-Q5P4O3N2\n"
+        "3. Office Suite, v2022, Z9Z8Z7Z6-Z5Z4Z3Z2-Z1Z0Z9Z8-Z7Z6Z5\n"
+        "4. VPN Client, v3.1, W6W5W4W3-W2W1W0-W9W8W7-W6W5W4\n"
+        "5. Project Management Tool, v4.2, VV8V7V6V5-V4V3V2V1-V0V9V8V7-V6V5V4\n\n"
+        "Important: This inventory is crucial for tracking and managing software across Enigma Corps systems. The provided license keys are randomized for security reasons. Handle this information responsibly, and ensure it is only accessible to authorized personnel to maintain the security and compliance of our software assets."
+    )
+}
     ]
         self.emails = [
             
