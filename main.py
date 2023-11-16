@@ -10,6 +10,7 @@ from minigames.code_shatter_minigame import code_shatter_minigame
 from components.help.help import connect_help, system_help, shop_help, mail_help, help_user
 from components.print_slow.print_slow import print_slow
 
+from systems.main_system.user_system import connect, mail
 from systems.level_1.markus_system import MarkusSystem
 from systems.level_1.billy_system import BillySystem
 from systems.level_1.amy_system import AmySystem
