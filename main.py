@@ -37,6 +37,8 @@ billy_system = BillySystem()
 markus_system = MarkusSystem()
 triggered_emails = []
 
+def clear_terminal():
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 # Save the game state to a file
 def save_game():
@@ -416,8 +418,12 @@ def start_game():
         # Check balance
         elif command.lower() == "balance":
             print_balance()
+        # Enter shop
         elif command.lower() == "shop":
             shop()
+        # Clear terminal
+        elif command.lower() == "clear":
+            clear_terminal()
         # Return to the main menu
         elif command.lower() == "exit":
             print_slow("Returning to Main Menu...")
