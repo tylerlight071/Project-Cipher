@@ -6,7 +6,6 @@ import time
 from IPython.display import clear_output
 
 from systems.level_1.markus_system import MarkusSystem
-# TODO implement Markus system to script
 from systems.level_1.billy_system import BillySystem
 from systems.level_1.amy_system import AmySystem
 
@@ -33,6 +32,7 @@ has_read_file = False
 evidence = []
 amy_system = AmySystem()
 billy_system = BillySystem()
+markus_system = MarkusSystem()
 triggered_emails = []
 
 
@@ -623,6 +623,59 @@ def billy_mail():
             print_slow(Fore.RED + "\nInvalid command, please try again." + Style.RESET_ALL)
 
 
+def markus_system_command_loop(system):
+    print_slow(Fore.YELLOW + "Connected to Markus' system." + Style.RESET_ALL)
+
+    while True:
+        command = input(Fore.YELLOW + "> " + Style.RESET_ALL)
+
+        if command.lower() == "l":
+            system.list_files()
+        elif command.lower().startswith("r "):
+            file_name = command[2:]
+            file_content = system.read_file(file_name)  # Store the file content in a variable
+            if file_content:  # Check if the file was found
+                read_file(file_content, file_name, triggered_emails)  # Pass the file content to the read_file function
+        elif command.lower() == "mail":
+            markus_mail()
+        elif command.lower() == "help":
+            system_help()
+        elif command.lower() == "disconnect":
+            print_slow(Fore.YELLOW + "\nDisconnecting from system...")
+            print("")
+            time.sleep(1)
+            print_slow(Fore.YELLOW + "\nDisconnected ")
+            break
+        else:
+            print_slow(Fore.RED + "\nInvalid command, please try again." + Style.RESET_ALL)
+
+
+# Function to access Amy's mail system
+def markus_mail():
+    print_slow(Fore.LIGHTBLUE_EX + "Markus' Mail System:" + Style.RESET_ALL)
+
+    while True:
+        command = input(
+            Fore.LIGHTBLUE_EX + "\n> " + Style.RESET_ALL)
+
+        if command.lower() == 'l':
+            # List emails
+            list_emails(markus_system.emails)
+        elif command.lower().startswith('r '):
+            # Read email
+            subject = command[2:]
+            read_email(markus_system.emails, subject, triggered_emails)
+        elif command.lower() == 'help':
+            # Display mail help message
+            mail_help()
+        elif command.lower() == 'exit':
+            # Exit mail system
+            print_slow(Fore.LIGHTBLUE_EX + "\nExiting Mail System..." + Style.RESET_ALL)
+            break
+        else:
+            print_slow(Fore.RED + "\nInvalid command, please try again." + Style.RESET_ALL)
+
+
 def hack(system_name):
     # Find the system in the all_systems list
     system = next((s for s in all_systems if s['name'].lower() == system_name.lower()), None)
@@ -636,6 +689,8 @@ def hack(system_name):
                     amy_system_command_loop(amy_system)
                 if system['name'] == 'Billy':
                     billy_system_command_loop(billy_system)
+                if system['name'] == 'Markus':
+                    markus_system_command_loop(markus_system)
                 else:
                     # TODO: Implement other system interactions
                     pass
