@@ -1,24 +1,24 @@
 import random
 from colorama import Fore, Style
-
+from components.print_slow.print_slow import print_slow
 
 def code_shatter_minigame():
     print("Debug: Entering CodeShatter MiniGame")
     # Generate a random 5-digit number
     target = [str(random.randint(1, 9)) for _ in range(5)]
 
-    print("Welcome to CodeShatter!")
-    print("")
-    print("Guess the 5-digit number.")
-    print("")
-    print("The sequence can contain multiple same numbers")
-    print("")
-    print(Fore.GREEN + "Green: Correct digit in correct position." + Style.RESET_ALL)
-    print("")
-    print(Fore.YELLOW + "Orange: Correct digit in incorrect position." + Style.RESET_ALL)
-    print("")
-    print(Fore.RED + "Red: Incorrect digit." + Style.RESET_ALL)
-    print("")
+    print_slow("Welcome to CodeShatter!")
+    print_slow("")
+    print_slow("Guess the 5-digit number.")
+    print_slow("")
+    print_slow("The sequence can contain multiple same numbers")
+    print_slow("")
+    print_slow(Fore.GREEN + "Green: Correct digit in correct position." + Style.RESET_ALL)
+    print_slow("")
+    print_slow(Fore.YELLOW + "Orange: Correct digit in incorrect position." + Style.RESET_ALL)
+    print_slow("")
+    print_slow(Fore.RED + "Red: Incorrect digit." + Style.RESET_ALL)
+    print_slow("")
 
     attempts = 0
     while attempts < 7:
@@ -26,7 +26,7 @@ def code_shatter_minigame():
         guess = input("Enter your guess: ")
 
         if len(guess) != 5 or not guess.isdigit():
-            print("Invalid input. Please enter a 5-digit number.")
+            print_slow("Invalid input. Please enter a 5-digit number.")
             continue
 
         attempts += 1
@@ -45,8 +45,8 @@ def code_shatter_minigame():
 
         # Check if the guess is correct
         if guess == "".join(target):
-            print(Fore.GREEN + "Access granted." + Style.RESET_ALL)
+            print_slow(Fore.GREEN + "Access granted." + Style.RESET_ALL)
             break
     else:
-        print(Fore.RED + "Access denied. Too many attempts." + Style.RESET_ALL)
+        print_slow(Fore.RED + "Access denied. Too many attempts." + Style.RESET_ALL)
 
