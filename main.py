@@ -187,6 +187,7 @@ def main():
         print_slow(Fore.GREEN + "|                 Main Menu                  |" + Style.RESET_ALL)
         print_slow(Fore.GREEN + "---------------------------------------------" + Style.RESET_ALL)
         print_slow(Fore.GREEN + "| [Start]  Start the game                    |" + Style.RESET_ALL)
+        print_slow(Fore.GREEN + "| [Options]   Chnage the settings                     |" + Style.RESET_ALL)
         print_slow(Fore.GREEN + "| [Exit]   Exit the game                     |" + Style.RESET_ALL)
         print_slow(Fore.GREEN + "---------------------------------------------" + Style.RESET_ALL)
 
@@ -195,6 +196,7 @@ def main():
         # Start the game
         if choice.lower() == "start":
             start_game()
+        # TODO add options method 
         # Exit the game
         elif choice.lower() == "exit":
             print_slow(Fore.GREEN + "\nExiting..." + Style.RESET_ALL)
