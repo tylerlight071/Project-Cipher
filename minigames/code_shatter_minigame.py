@@ -50,4 +50,3 @@ def code_shatter_minigame():
     else:
         print(Fore.RED + "Access denied. Too many attempts." + Style.RESET_ALL)
 
-code_shatter_minigame()

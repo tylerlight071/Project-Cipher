@@ -37,8 +37,10 @@ billy_system = BillySystem()
 markus_system = MarkusSystem()
 triggered_emails = []
 
+
 def clear_terminal():
     os.system('cls' if os.name == 'nt' else 'clear')
+
 
 # Save the game state to a file
 def save_game():
@@ -714,7 +716,6 @@ def hack(system_name):
             print_slow(Fore.RED + "Access denied! This system is locked." + Style.RESET_ALL)
     else:
         print_slow(Fore.RED + "System not found! Please try again." + Style.RESET_ALL)
-
 
 
 def scan():
