@@ -8,6 +8,7 @@ from IPython.display import clear_output
 from minigames.code_shatter_minigame import code_shatter_minigame
 
 from components.help.help import connect_help, system_help, shop_help, mail_help, help_user
+from components.print_slow.print_slow import print_slow
 
 from systems.level_1.markus_system import MarkusSystem
 from systems.level_1.billy_system import BillySystem
@@ -143,14 +144,6 @@ def add_evidence(evidence_item):
 
 def has_evidence(evidence_item):
     return evidence_item in evidence
-
-
-# Makes the text have a delay of (x) when printed to screen
-def print_slow(text, delay=0.00):  # change to 0.01
-    for char in text:
-        print(char, end='', flush=True)
-        time.sleep(delay)
-    print()
 
 
 # Prints the games title
