@@ -7,6 +7,8 @@ from IPython.display import clear_output
 
 from minigames.code_shatter_minigame import code_shatter_minigame
 
+from components.help.help import connect_help, system_help, shop_help, mail_help, help_user
+
 from systems.level_1.markus_system import MarkusSystem
 from systems.level_1.billy_system import BillySystem
 from systems.level_1.amy_system import AmySystem
