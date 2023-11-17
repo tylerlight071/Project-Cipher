@@ -22,6 +22,8 @@ def help_user():
     print("")
     print_slow("[shop] - Use the 'shop' command to view upgrades available in the shop. ")
     print("")
+    print_slow("[clear] - Use the 'clear' command to clear the terminal.")
+    print("")
     print_slow("[help] - Use the 'help' command if you need assistance at any time.")
     print("")
     print_slow("[exit] - Use the 'exit' command to return to the Main Menu.")
