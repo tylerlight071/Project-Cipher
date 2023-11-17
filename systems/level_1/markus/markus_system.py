@@ -71,13 +71,13 @@ class MarkusSystem:
                 "sender": "Markus",
                 "subject": "System Maintenance Scheduled",
                 "body": (
-                    "Dear [Manager's Name],\n\n"
+                    "Dear Michael,\n\n"
                     "I hope this email finds you well. We wanted to inform you that we have scheduled a system maintenance session for the upcoming weekend to ensure the optimal performance and security of our systems.\n\n"
                     "Maintenance Details:\n"
-                    "- Date: [Maintenance Date]\n"
-                    "- Time: [Maintenance Time]\n"
-                    "- Duration: [Estimated Duration]\n"
-                    "- Impact: [Brief description of potential impact, if any]\n\n"
+                    "- Date: 16/12/23 - 17/12/23\n"
+                    "- Time: 3:00pm\n"
+                    "- Duration: 1 Hour\n"
+                    "- Impact: No impact expected\n\n"
                     "During this period, there might be temporary disruptions in certain services. Our team will be working diligently to minimize any inconvenience. If you have any concerns or specific considerations, please feel free to reach out to us.\n\n"
                     "Thank you for your understanding and cooperation.\n\n"
                     "Best regards,\n"
@@ -89,11 +89,11 @@ class MarkusSystem:
                 "sender": "Markus",
                 "subject": "Upcoming Software Update",
                 "body": (
-                    "Hi [Employee's Name],\n\n"
+                    "Good afternoon, Kyle,\n\n"
                     "We hope you're doing well. Our IT team is excited to inform you about an upcoming software update that will enhance the functionality and security of our systems. The update is scheduled for [Date] at [Time]. Please take note of the following details:\n\n"
-                    "- Expected Duration: [Estimated Duration]\n"
-                    "- Action Required: [Any action employees need to take, if applicable]\n"
-                    "- Impact: [Brief description of potential impact, if any]\n\n"
+                    "- Expected Duration: Two Days\n"
+                    "- Action Required: As this will be processed during the weekend, no action is required.\n"
+                    "- Impact: While we anticipate minimal impact on your day-to-day activities, it's essential to be aware of any potential changes. These include: New UI to navigate, logging in or logging out issues.\n\n"
                     "We recommend saving your work and logging out of your system before the update. If you encounter any issues post-update, don't hesitate to contact our IT support team for assistance.\n\n"
                     "Thank you for your cooperation and understanding.\n\n"
                     "Best regards,\n"
@@ -105,7 +105,7 @@ class MarkusSystem:
                 "sender": "Markus",
                 "subject": "Urgent: Password Security Update Required",
                 "body": (
-                    "Hi Billy,\n\n"
+                    "Billy,\n\n"
                     "I hope this email finds you well. I wanted to bring to your attention the importance of updating your current password. This is not the first time I've raised this concern, and I want to emphasize its critical nature.\n\n"
                     "In recent security assessments, it has been flagged that your current password might not meet the latest security standards. To ensure the safety of your account and our overall cybersecurity, it is imperative that you change your password promptly.\n\n"
                     "I understand that these reminders may seem repetitive, but they stem from a genuine concern for the security of your account and our collective responsibility in maintaining a robust cybersecurity posture.\n\n"

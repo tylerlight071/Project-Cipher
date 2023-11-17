@@ -40,6 +40,7 @@ markus_system = MarkusSystem()
 triggered_emails = []
 bg_music_enabled = True
 
+
 def clear_terminal():
     os.system('cls' if os.name == 'nt' else 'clear')
 
@@ -133,7 +134,8 @@ def game_settings():
     print_slow(Fore.GREEN + "---------------------------------------------" + Style.RESET_ALL)
     print_slow(Fore.GREEN + "|                 Game Settings              |" + Style.RESET_ALL)
     print_slow(Fore.GREEN + "---------------------------------------------" + Style.RESET_ALL)
-    print_slow(Fore.GREEN + f"| 1. Background Music     {'Enabled            |' if bg_music_enabled else 'Disabled           |'}" + Style.RESET_ALL)
+    print_slow(
+        Fore.GREEN + f"| 1. Background Music     {'Enabled            |' if bg_music_enabled else 'Disabled           |'}" + Style.RESET_ALL)
     print_slow(Fore.GREEN + "| 2. Delete Savegame                         |" + Style.RESET_ALL)
     print_slow(Fore.GREEN + "| 3. Back to Main Menu                       |" + Style.RESET_ALL)
     print_slow(Fore.GREEN + "---------------------------------------------" + Style.RESET_ALL)
@@ -173,9 +175,6 @@ def game_settings():
 # Function to add an item to the inventory
 def add_to_inventory(item):
     inventory.append(item)
-
-
-# Function to check if an item is in the inventory
 
 
 def add_evidence(evidence_item):
@@ -414,6 +413,7 @@ def start_game():
         save_game()
 
 
+# Function to check if an item is in the inventory
 def has_item(item):
     return item in inventory
 
@@ -505,6 +505,14 @@ def read_email(emails, subject, triggered_emails):
                     print("")
                     print_slow(Fore.GREEN + "Evidence Secured" + Style.RESET_ALL)
                     add_evidence(evidence_item)
+            if email['subject'].lower() == "upcoming software update" and email ['sender'].lower() == 'markus':
+                evidence_item = 6
+                if not has_evidence(evidence_item):
+                    print("Adding evidence to the list...")
+                    print("")
+                    print("")
+                    print_slow(Fore.GREEN + "Evidence Secured" + Style.RESET_ALL)
+                    add_evidence(evidence_item)
 
                     # Add money to balance based on the email subject
             if email['subject'].lower() == "professional development":
@@ -513,6 +521,8 @@ def read_email(emails, subject, triggered_emails):
                 balance += 50
             elif email['subject'].lower() == "can't stop thinking about you":
                 balance += 20
+            elif email['subject'].lower() == "upcoming software update":
+                balance += 50
 
             # Print the updated balance
             print_balance()
