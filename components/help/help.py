@@ -36,6 +36,8 @@ def mail_help():
     print("")
     print_slow("[r] - Use the 'r [subject]' command to read an email with the specified subject.")
     print("")
+    print_slow("[clear] - Use the 'clear' command to clear the terminal.")
+    print("")
     print_slow("[exit] - Use the 'exit' command to return to the main terminal.")
 
 
@@ -43,6 +45,8 @@ def shop_help():
     print_slow(Fore.YELLOW + "Shop Help:" + Style.RESET_ALL)
     print("")
     print_slow("[buy] - Use the 'buy [upgrade]' command to purchase the upgrade in the shop. ")
+    print("")
+    print_slow("[clear] - Use the 'clear' command to clear the terminal.")
     print("")
     print_slow("[exit] - Use the 'exit' command to return to the main terminal.")
 
@@ -53,6 +57,8 @@ def system_help():
     print("")
     print_slow("[l] - Use the 'l' command to list files in a users system.")
     print("")
+    print_slow("[clear] - Use the 'clear' command to clear the terminal.")
+    print("")
     print_slow("[r] - Use the 'r [file]' command to read files in a users system")
 
 
@@ -62,5 +68,7 @@ def connect_help():
         "[scan] - Use the 'scan' command to scan the network and search for available systems and vulnerabilities.")
     print("")
     print_slow("[hack] - Use the 'hack [system/vulnerability]' to hack into different systems.")
+    print("")
+    print_slow("[clear] - Use the 'clear' command to clear the terminal.")
     print("")
     print_slow("[disconnect] - Use the 'disconnect' command to disconnect from the current system or vulnerability.")
