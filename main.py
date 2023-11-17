@@ -5,15 +5,13 @@ from colorama import Fore, Style
 import time
 from IPython.display import clear_output
 
+from components.help.help import system_help, shop_help, mail_help, help_user, connect_help
+from components.print_slow.print_slow import print_slow
 from minigames.code_shatter_minigame import code_shatter_minigame
 
-from components.help.help import connect_help, system_help, shop_help, mail_help, help_user
-from components.print_slow.print_slow import print_slow
-
-from systems.main_system.user_system import connect, mail
-from systems.level_1.markus_system import MarkusSystem
-from systems.level_1.billy_system import BillySystem
-from systems.level_1.amy_system import AmySystem
+from systems.level_1.markus.markus_system import MarkusSystem
+from systems.level_1.billy.billy_system import BillySystem
+from systems.level_1.amy.amy_system import AmySystem
 
 # Set the PYGAME_HIDE_SUPPORT_PROMPT environment variable
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "1"
@@ -40,7 +38,7 @@ amy_system = AmySystem()
 billy_system = BillySystem()
 markus_system = MarkusSystem()
 triggered_emails = []
-
+bg_music_enabled = True
 
 def clear_terminal():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -129,14 +127,55 @@ def load_game():
         ]
 
 
+# New function for game settings
+def game_settings():
+    global bg_music_enabled
+    print_slow(Fore.GREEN + "---------------------------------------------" + Style.RESET_ALL)
+    print_slow(Fore.GREEN + "|                 Game Settings              |" + Style.RESET_ALL)
+    print_slow(Fore.GREEN + "---------------------------------------------" + Style.RESET_ALL)
+    print_slow(Fore.GREEN + f"| 1. Background Music     {'Enabled            |' if bg_music_enabled else 'Disabled           |'}" + Style.RESET_ALL)
+    print_slow(Fore.GREEN + "| 2. Delete Savegame                         |" + Style.RESET_ALL)
+    print_slow(Fore.GREEN + "| 3. Back to Main Menu                       |" + Style.RESET_ALL)
+    print_slow(Fore.GREEN + "---------------------------------------------" + Style.RESET_ALL)
+
+    choice = input("\n> ")
+
+    if choice.lower() == "background music":
+        # Toggle background music
+        bg_music_enabled = not bg_music_enabled
+        if bg_music_enabled:
+            pygame.mixer.music.play(-1)
+            print_slow(Fore.GREEN + "\nBackground Music Enabled" + Style.RESET_ALL)
+            game_settings()
+        else:
+            pygame.mixer.music.stop()
+            print_slow(Fore.RED + "\nBackground Music Disabled" + Style.RESET_ALL)
+            game_settings()
+    elif choice.lower() == "delete savegame":
+        # Delete savegame
+        confirm = input("\nAre you sure you want to delete the savegame? (yes/no): ")
+        if confirm.lower() == "yes":
+            try:
+                os.remove("savegame.pkl")
+                print_slow(Fore.GREEN + "\nSavegame Deleted" + Style.RESET_ALL)
+                game_settings()
+            except FileNotFoundError:
+                print_slow(Fore.RED + "\nSavegame not found" + Style.RESET_ALL)
+                game_settings()
+    elif choice.lower() == "exit" or choice.lower() == "back to main menu":
+        # Return to Main Menu
+        print_slow(Fore.GREEN + "\nReturning to Main Menu..." + Style.RESET_ALL)
+    else:
+        print_slow(Fore.RED + "\nInvalid choice, please try again." + Style.RESET_ALL)
+        game_settings()
+
+
 # Function to add an item to the inventory
 def add_to_inventory(item):
     inventory.append(item)
 
 
 # Function to check if an item is in the inventory
-def has_item(item):
-    return item in inventory
 
 
 def add_evidence(evidence_item):
@@ -187,7 +226,7 @@ def main():
         print_slow(Fore.GREEN + "|                 Main Menu                  |" + Style.RESET_ALL)
         print_slow(Fore.GREEN + "---------------------------------------------" + Style.RESET_ALL)
         print_slow(Fore.GREEN + "| [Start]  Start the game                    |" + Style.RESET_ALL)
-        print_slow(Fore.GREEN + "| [Options]   Chnage the settings                     |" + Style.RESET_ALL)
+        print_slow(Fore.GREEN + "| [Options] Change the settings              |" + Style.RESET_ALL)
         print_slow(Fore.GREEN + "| [Exit]   Exit the game                     |" + Style.RESET_ALL)
         print_slow(Fore.GREEN + "---------------------------------------------" + Style.RESET_ALL)
 
@@ -196,7 +235,9 @@ def main():
         # Start the game
         if choice.lower() == "start":
             start_game()
-        # TODO add options method 
+        # Open game settings
+        elif choice.lower() == "options":
+            game_settings()
         # Exit the game
         elif choice.lower() == "exit":
             print_slow(Fore.GREEN + "\nExiting..." + Style.RESET_ALL)
@@ -228,6 +269,7 @@ def print_balance():
     print(f"Your current balance is: £{get_balance()}")
 
 
+# Function to read files and marks files as evidence
 def read_file(file_content, file_name, evidence_list):
     global has_read_file, evidence
     global balance
@@ -272,69 +314,6 @@ def read_file(file_content, file_name, evidence_list):
             break
 
 
-def read_email(emails, subject, triggered_emails):
-    global has_read_email, evidence
-    global balance  # Add this line to access the global balance variable
-    email_found = False
-    for email in emails:
-        if email['subject'].lower() == subject.lower():
-            email_found = True
-            # If the email is from Prophet, set has_read_email to True
-            if email['sender'].lower() == 'prophet':
-                has_read_email = True
-            print_slow(
-                Fore.LIGHTBLUE_EX + f"\nFrom: {email['sender']}\nSubject: {email['subject']}\n\n{email['body']}" + Style.RESET_ALL)
-
-            # Check if the email is one of the specific emails that increases evidence count
-            if email['subject'].lower() in ["project update"]:
-                evidence_item = 3
-                if not has_evidence(evidence_item):
-                    add_evidence(evidence_item)
-                    print("Adding evidence to the list...")
-                    print("")
-                    print_slow(Fore.GREEN + "Evidence Secured" + Style.RESET_ALL)
-
-            if email['subject'].lower() in ["professional development"]:
-                evidence_item = 2
-                if not has_evidence(evidence_item):
-                    add_evidence(evidence_item)
-                    print("Adding evidence to the list...")
-                    print("")
-                    print_slow(Fore.GREEN + "Evidence Secured" + Style.RESET_ALL)
-
-            if email['subject'].lower() == "can't stop thinking about you" and email['sender'].lower() == 'amy':
-                evidence_item = 1
-                if not has_evidence(evidence_item):
-                    print("Adding evidence to the list...")
-                    print("")
-                    print("")
-                    print_slow(Fore.GREEN + "Evidence Secured" + Style.RESET_ALL)
-                    add_evidence(evidence_item)
-
-                    # Add money to balance based on the email subject
-            if email['subject'].lower() == "professional development":
-                balance += 30
-            elif email['subject'].lower() == "project update":
-                balance += 50
-            elif email['subject'].lower() == "can't stop thinking about you":
-                balance += 20
-
-            # Print the updated balance
-            print_balance()
-
-            # Check the evidence count and display the triggered emails
-            for triggered_email in reversed(triggered_emails):
-                if len(evidence) >= triggered_email['evidence_required']:
-                    time.sleep(3)
-                    print_slow(
-                        Fore.MAGENTA + f"\nFrom: {triggered_email['sender']}\nTo: {triggered_email['recipient']}\nSubject: {triggered_email['subject']}\n\n{triggered_email['body']}" + Style.RESET_ALL)
-                    break
-
-    if not email_found:
-        print_slow(Fore.RED + "\nNo email found with that subject, please try again." + Style.RESET_ALL)
-
-
-# List of available upgrades
 # List of available upgrades
 upgrades = [
     {"name": "EnigmaLink", "description": "Application required to connect to Enigma Corps network.", "price": 300},
@@ -433,15 +412,191 @@ def start_game():
 
         # Save the game state
         save_game()
-        
 
-# Function to list emails
+
+def has_item(item):
+    return item in inventory
+
+
+def scan():
+    print_slow(Fore.YELLOW + "Scanning network..." + Style.RESET_ALL)
+    time.sleep(2)
+
+    print_slow(Fore.YELLOW + "\nAvailable Systems:" + Style.RESET_ALL)
+    for system in all_systems:
+        if system['level'] <= player_level:
+            print_slow(f"{system['name']} ({system['type']})")
+
+
+def hack(system_name):
+    # Find the system in the all_systems list
+    system = next((s for s in all_systems if s['name'].lower() == system_name.lower()), None)
+    if system:
+        if system['level'] <= player_level:
+            # Check for CodeShatter before prompting for password
+            if system['name'] == 'Markus' and has_item("CodeShatter"):
+                code_shatter_minigame()
+                markus_system_command_loop(markus_system)
+            else:
+                # Prompt the user for the password
+                password = input("Enter password: ")
+                if password == system['password']:
+                    print_slow(Fore.GREEN + "Access granted!" + Style.RESET_ALL)
+                    if system['name'] == 'Amy':
+                        amy_system_command_loop(amy_system)
+                    elif system['name'] == 'Billy':
+                        billy_system_command_loop(billy_system)
+                    elif system['name'] == 'Markus':
+                        # No need to check for CodeShatter again, as it's done above
+                        markus_system_command_loop(markus_system)
+                    else:
+                        # Add more conditions for other systems
+                        pass
+                else:
+                    print_slow(Fore.RED + "Access denied! Incorrect password." + Style.RESET_ALL)
+        else:
+            print_slow(Fore.RED + "Access denied! This system is locked." + Style.RESET_ALL)
+    else:
+        print_slow(Fore.RED + "System not found! Please try again." + Style.RESET_ALL)
+
+
 def list_emails(emails):
     print_slow(Fore.LIGHTBLUE_EX + "\nEmails:" + Style.RESET_ALL)
 
     for i, email in enumerate(emails):
         print_slow(Fore.LIGHTBLUE_EX + f"\n{email['subject']} - From: {email['sender']}" + Style.RESET_ALL)
 
+
+def read_email(emails, subject, triggered_emails):
+    global has_read_email, evidence
+    global balance  # Add this line to access the global balance variable
+    email_found = False
+    for email in emails:
+        if email['subject'].lower() == subject.lower():
+            email_found = True
+            # If the email is from Prophet, set has_read_email to True
+            if email['sender'].lower() == 'prophet':
+                has_read_email = True
+            print_slow(
+                Fore.LIGHTBLUE_EX + f"\nFrom: {email['sender']}\nSubject: {email['subject']}\n\n{email['body']}" + Style.RESET_ALL)
+
+            # Check if the email is one of the specific emails that increases evidence count
+            if email['subject'].lower() in ["project update"]:
+                evidence_item = 3
+                if not has_evidence(evidence_item):
+                    add_evidence(evidence_item)
+                    print("Adding evidence to the list...")
+                    print("")
+                    print_slow(Fore.GREEN + "Evidence Secured" + Style.RESET_ALL)
+
+            if email['subject'].lower() in ["professional development"]:
+                evidence_item = 2
+                if not has_evidence(evidence_item):
+                    add_evidence(evidence_item)
+                    print("Adding evidence to the list...")
+                    print("")
+                    print_slow(Fore.GREEN + "Evidence Secured" + Style.RESET_ALL)
+
+            if email['subject'].lower() == "can't stop thinking about you" and email['sender'].lower() == 'amy':
+                evidence_item = 1
+                if not has_evidence(evidence_item):
+                    print("Adding evidence to the list...")
+                    print("")
+                    print("")
+                    print_slow(Fore.GREEN + "Evidence Secured" + Style.RESET_ALL)
+                    add_evidence(evidence_item)
+
+                    # Add money to balance based on the email subject
+            if email['subject'].lower() == "professional development":
+                balance += 30
+            elif email['subject'].lower() == "project update":
+                balance += 50
+            elif email['subject'].lower() == "can't stop thinking about you":
+                balance += 20
+
+            # Print the updated balance
+            print_balance()
+
+            # Check the evidence count and display the triggered emails
+            for triggered_email in reversed(triggered_emails):
+                if len(evidence) >= triggered_email['evidence_required']:
+                    time.sleep(3)
+                    print_slow(
+                        Fore.MAGENTA + f"\nFrom: {triggered_email['sender']}\nTo: {triggered_email['recipient']}\nSubject: {triggered_email['subject']}\n\n{triggered_email['body']}" + Style.RESET_ALL)
+                    break
+
+    if not email_found:
+        print_slow(Fore.RED + "\nNo email found with that subject, please try again." + Style.RESET_ALL)
+
+
+def connect():
+    if has_item("EnigmaLink"):
+        print_slow(Fore.GREEN + "Connecting to Enigma Corps network using EnigmaLink..." + Style.RESET_ALL)
+        time.sleep(0.5)
+        print_slow(Fore.GREEN + "Establishing connection...")
+        time.sleep(1)
+        print_slow(Fore.GREEN + "Linking EnigmaLink to remote server...")
+        time.sleep(2)
+        print_slow(Fore.GREEN + "Decrypting server security protocols...")
+        time.sleep(3)
+        print_slow(Fore.GREEN + "Bypassing firewall...")
+        time.sleep(2)
+        print_slow(Fore.GREEN + "Connection established!")
+        print_slow(Fore.GREEN + "You are now connected to Enigma Corps network.")
+
+        # Network command loop
+        while True:
+            command = input(Fore.GREEN + "> " + Style.RESET_ALL)
+
+            # Scan the network for systems and vulnerabilities
+            if command.lower() == "scan":
+                scan()
+            # Hack into a system or vulnerability
+            elif command.lower().startswith("hack "):
+                target = command[5:]
+                hack(target)
+            # Display connect help message
+            elif command.lower() == "help":
+                connect_help()
+            # Exit the network
+            elif command.lower() == "exit":
+                print_slow("Disconnecting...")
+                time.sleep(2)
+                print_slow("Connection terminated.")
+                break
+            else:
+                print_slow("Invalid command, please try again.")
+    else:
+        print_slow(
+            Fore.RED + "You need to purchase EnigmaLink from the shop to connect to Enigma Corps network." + Style.RESET_ALL)
+
+
+def mail():
+    print_slow(Fore.LIGHTBLUE_EX + "Mail System:" + Style.RESET_ALL)
+
+    while True:
+        command = input(
+            Fore.LIGHTBLUE_EX + "\n> " + Style.RESET_ALL)
+
+        if command.lower() == 'l':
+            # List emails
+            list_emails(emails)
+        elif command.lower().startswith('r '):
+            # Read email
+            subject = command[2:]
+            read_email(emails, subject, triggered_emails)
+        elif command.lower() == 'help':
+            # Display mail help message
+            mail_help()
+        elif command.lower() == 'exit':
+            # Exit mail system
+            print_slow(Fore.LIGHTBLUE_EX + "\nExiting Mail System..." + Style.RESET_ALL)
+            break
+        else:
+            print_slow(Fore.RED + "\nInvalid command, please try again." + Style.RESET_ALL)
+
+
+# Function to list emails
 
 # List of all systems in the game
 all_systems = [
@@ -613,51 +768,6 @@ def markus_mail():
             break
         else:
             print_slow(Fore.RED + "\nInvalid command, please try again." + Style.RESET_ALL)
-
-
-def hack(system_name):
-    # Find the system in the all_systems list
-    system = next((s for s in all_systems if s['name'].lower() == system_name.lower()), None)
-    if system:
-        if system['level'] <= player_level:
-            # Check for CodeShatter before prompting for password
-            if system['name'] == 'Markus' and has_item("CodeShatter"):
-                code_shatter_minigame()
-                markus_system_command_loop(markus_system)
-            else:
-                # Prompt the user for the password
-                password = input("Enter password: ")
-                if password == system['password']:
-                    print_slow(Fore.GREEN + "Access granted!" + Style.RESET_ALL)
-                    if system['name'] == 'Amy':
-                        amy_system_command_loop(amy_system)
-                    elif system['name'] == 'Billy':
-                        billy_system_command_loop(billy_system)
-                    elif system['name'] == 'Markus':
-                        # No need to check for CodeShatter again, as it's done above
-                        markus_system_command_loop(markus_system)
-                    else:
-                        # Add more conditions for other systems
-                        pass
-                else:
-                    print_slow(Fore.RED + "Access denied! Incorrect password." + Style.RESET_ALL)
-        else:
-            print_slow(Fore.RED + "Access denied! This system is locked." + Style.RESET_ALL)
-    else:
-        print_slow(Fore.RED + "System not found! Please try again." + Style.RESET_ALL)
-
-
-def scan():
-    print_slow(Fore.YELLOW + "Scanning network..." + Style.RESET_ALL)
-    time.sleep(2)
-
-    print_slow(Fore.YELLOW + "\nAvailable Systems:" + Style.RESET_ALL)
-    for system in all_systems:
-        if system['level'] <= player_level:
-            print_slow(f"{system['name']} ({system['type']})")
-
-
-
 
 
 # Run the main function when the script is executed
