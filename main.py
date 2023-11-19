@@ -564,10 +564,7 @@ def connect():
             # Hack into a system or vulnerability
             elif command.lower().startswith("hack "):
                 target = command[5:]
-                if "--item codeshatter" in command.lower():
-                hack_with_codeshatter(target)
-                else:
-                    hack(target)
+                hack(target)
             # Display connect help message
             elif command.lower() == "help":
                 connect_help()
