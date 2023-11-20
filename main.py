@@ -8,6 +8,7 @@ from IPython.display import clear_output
 from components.help.help import system_help, shop_help, mail_help, help_user, connect_help
 from components.print_slow.print_slow import print_slow
 from minigames.code_shatter_minigame import code_shatter_minigame
+from components.common_functions import clear_terminal
 
 from systems.level_1.markus.markus_system import MarkusSystem
 from systems.level_1.billy.billy_system import BillySystem
@@ -39,10 +40,6 @@ billy_system = BillySystem()
 markus_system = MarkusSystem()
 triggered_emails = []
 bg_music_enabled = True
-
-
-def clear_terminal():
-    os.system('cls' if os.name == 'nt' else 'clear')
 
 
 # Save the game state to a file
@@ -215,7 +212,7 @@ def main():
     time.sleep(2)
 
     # Clear the console
-    clear_output(wait=True)
+    clear_terminal()
 
     load_game()
 
@@ -505,7 +502,7 @@ def read_email(emails, subject, triggered_emails):
                     print("")
                     print_slow(Fore.GREEN + "Evidence Secured" + Style.RESET_ALL)
                     add_evidence(evidence_item)
-            if email['subject'].lower() == "upcoming software update" and email ['sender'].lower() == 'markus':
+            if email['subject'].lower() == "upcoming software update" and email['sender'].lower() == 'markus':
                 evidence_item = 6
                 if not has_evidence(evidence_item):
                     print("Adding evidence to the list...")
@@ -564,7 +561,15 @@ def connect():
             # Hack into a system or vulnerability
             elif command.lower().startswith("hack "):
                 target = command[5:]
+<<<<<<< Updated upstream
                 hack(target)
+=======
+                if "--item codeshatter" in command.lower():
+                    # hack_with_codeshatter(target)
+                    pass
+                else:
+                    hack(target)
+>>>>>>> Stashed changes
             # Display connect help message
             elif command.lower() == "help":
                 connect_help()

@@ -1,6 +1,8 @@
 import time
+import os
 from colorama import Fore, Style
 from components.print_slow.print_slow import print_slow
+
 
 # Function to display help message
 def help_user():
@@ -65,12 +67,14 @@ def connect_help():
     print("")
     print_slow("[disconnect] - Use the 'disconnect' command to disconnect from the current system or vulnerability.")
 
+
 # Makes the text have a delay of (x) when printed to screen
 def print_slow(text, delay=0.00):  # change to 0.01
     for char in text:
         print(char, end='', flush=True)
         time.sleep(delay)
     print()
+
 
 def clear_terminal():
     os.system('cls' if os.name == 'nt' else 'clear')
