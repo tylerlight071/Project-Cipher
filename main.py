@@ -92,35 +92,35 @@ def load_game():
                 "body": "Good start, but we already have that information."
                         "\nI have transferred you £20 for your troubles."
                         "\n\nKeep digging Cipher!",
-                "evidence_required": 1
+                "evidence_item": 1
             },
             {
                 "sender": "Anonymous",
                 "recipient": "Cipher",
                 "subject": "Second Piece of Evidence",
                 "body": "Great job! You've found your second piece of evidence.",
-                "evidence_required": 2
+                "evidence_item": 2
             },
             {
                 "sender": "Anonymous",
                 "recipient": "Cipher",
                 "subject": "Third Piece of Evidence",
                 "body": "Fantastic! You've uncovered the third piece of evidence.",
-                "evidence_required": 3
+                "evidence_item": 3
             },
             {
                 "sender": "Anonymous",
                 "recipient": "Cipher",
                 "subject": "Fourth Piece of Evidence",
                 "body": "Excellent work! You've obtained the fourth piece of evidence.",
-                "evidence_required": 4
+                "evidence_item": 4
             },
             {
                 "sender": "Anonymous",
                 "recipient": "Cipher",
                 "subject": "Fifth Piece of Evidence",
                 "body": "Outstanding! You've secured the fifth piece of evidence.",
-                "evidence_required": 5
+                "evidence_item": 5
             }
             # Add more emails here as needed
         ]
@@ -300,6 +300,7 @@ def read_file(file_content, file_name, evidence_list):
             print("Adding evidence to the list...")
             print("")
             print_slow(Fore.GREEN + "Evidence Secured" + Style.RESET_ALL)
+            display_triggered_emails(triggered_emails)
 
     if file_name.lower() in ["meeting_minutes.txt"]:
         evidence_item = 5
@@ -308,6 +309,7 @@ def read_file(file_content, file_name, evidence_list):
             print("Adding evidence to the list...")
             print("")
             print_slow(Fore.GREEN + "Evidence Secured" + Style.RESET_ALL)
+            display_triggered_emails(triggered_emails)
 
     # Add more file names here as needed
 
@@ -320,21 +322,16 @@ def read_file(file_content, file_name, evidence_list):
     # Print the updated balance
     print_balance()
 
-    # Check the evidence count and display the triggered emails
-    for triggered_email in reversed(evidence_list):
-        if len(evidence) >= triggered_email['evidence_required']:
-            time.sleep(3)
-            print_slow(
-                Fore.MAGENTA + f"\nFrom: {triggered_email['sender']}\nTo: {triggered_email['recipient']}\nSubject: {triggered_email['subject']}\n\n{triggered_email['body']}" + Style.RESET_ALL)
-            break
-
 
 # List of available upgrades
 upgrades = [
     {"name": "EnigmaLink", "description": "Application required to connect to Enigma Corps network.", "price": 300},
+    {""},
     {"name": "CodeShatter", "description": "A powerful password breaker that can crack even the strongest passwords.",
      "price": 200},
+    {""},
     {"name": "EyeSpy", "description": "A privacy breaker to gain access to the smallest of cameras.", "price": 500},
+    {""},
     {"name": "Rift", "description": "Break the barrier between the Server and Network.", "price": 800}
 ]
 
@@ -492,7 +489,7 @@ def list_emails(emails):
 
 def read_email(emails, subject, triggered_emails):
     global has_read_email, evidence
-    global balance  # Add this line to access the global balance variable
+    global balance
     email_found = False
     for email in emails:
         if email['subject'].lower() == subject.lower():
@@ -536,6 +533,7 @@ def read_email(emails, subject, triggered_emails):
                     print("")
                     print_slow(Fore.GREEN + "Evidence Secured" + Style.RESET_ALL)
                     add_evidence(evidence_item)
+                    display_triggered_emails(triggered_emails)
 
                     # Add money to balance based on the email subject
             if email['subject'].lower() == "professional development":
@@ -550,16 +548,18 @@ def read_email(emails, subject, triggered_emails):
             # Print the updated balance
             print_balance()
 
-            # Check the evidence count and display the triggered emails
-            for triggered_email in reversed(triggered_emails):
-                if len(evidence) >= triggered_email['evidence_required']:
-                    time.sleep(3)
-                    print_slow(
-                        Fore.MAGENTA + f"\nFrom: {triggered_email['sender']}\nTo: {triggered_email['recipient']}\nSubject: {triggered_email['subject']}\n\n{triggered_email['body']}" + Style.RESET_ALL)
-                    break
-
     if not email_found:
         print_slow(Fore.RED + "\nNo email found with that subject, please try again." + Style.RESET_ALL)
+
+
+def display_triggered_emails(triggered_emails):
+    # Check the evidence count and display the triggered emails
+    for triggered_email in reversed(triggered_emails):
+        if len(evidence) >= triggered_email['evidence_item']:
+            time.sleep(3)
+            print_slow(
+                Fore.MAGENTA + f"\nFrom: {triggered_email['sender']}\nTo: {triggered_email['recipient']}\nSubject: {triggered_email['subject']}\n\n{triggered_email['body']}" + Style.RESET_ALL)
+            break
 
 
 def connect():
