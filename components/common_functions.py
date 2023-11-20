@@ -2,6 +2,8 @@ import time
 import os
 from colorama import Fore, Style
 from components.print_slow.print_slow import print_slow
+import sys
+import subprocess
 
 
 # Function to display help message
@@ -78,3 +80,5 @@ def print_slow(text, delay=0.00):  # change to 0.01
 
 def clear_terminal():
     os.system('cls' if os.name == 'nt' else 'clear')
+
+

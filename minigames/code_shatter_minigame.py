@@ -2,6 +2,7 @@ import random
 from colorama import Fore, Style
 from components.print_slow.print_slow import print_slow
 
+
 def code_shatter_minigame():
     print("Debug: Entering CodeShatter MiniGame")
     # Generate a random 5-digit number
@@ -49,4 +50,3 @@ def code_shatter_minigame():
             break
     else:
         print_slow(Fore.RED + "Access denied. Too many attempts." + Style.RESET_ALL)
-
