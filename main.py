@@ -454,6 +454,9 @@ def hack(system_name):
             # Check for CodeShatter before prompting for password
             if system['name'] == 'Markus' and has_item("CodeShatter"):
                 code_shatter_minigame()
+                print_slow("Password Cracked: 735@&!//")
+                input("Press [Enter] to continue")
+                clear_terminal()
                 markus_system_command_loop(markus_system)
                 add_level(player_level)
             else:
@@ -631,7 +634,7 @@ def mail():
 # List of all systems in the game
 all_systems = [
     {"name": "Amy", "type": "Computer", "level": 1, "password": "sexinthecity"},
-    {"name": "Markus", "type": "Computer", "level": 1, "password": "12345"},
+    {"name": "Markus", "type": "Computer", "level": 1, "password": "735@&!//"},
     {"name": "Billy", "type": "Computer", "level": 1, "password": "football"},
     {"name": "Camera1", "type": "Camera", "level": 2, "password": "camera1"},
     {"name": "Camera2", "type": "Camera", "level": 2, "password": "camera2"},
