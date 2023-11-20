@@ -39,26 +39,28 @@ billy_system = BillySystem()
 markus_system = MarkusSystem()
 triggered_emails = []
 bg_music_enabled = True
+player_level = 1
 
 
 # Save the game state to a file
 def save_game():
-    global inventory, balance, emails, has_read_email, evidence, triggered_emails  # Add has_read_email here
+    global inventory, balance, emails, has_read_email, evidence, triggered_emails, player_level  # Add has_read_email here
     with open('savegame.pkl', 'wb') as f:
-        pickle.dump((inventory, balance, emails, has_read_email, evidence, triggered_emails),
+        pickle.dump((inventory, balance, emails, has_read_email, evidence, triggered_emails, player_level),
                     f)  # Add has_read_email here
 
 
 # Load the game state from a file
 def load_game():
-    global inventory, balance, emails, has_read_email, evidence, triggered_emails
+    global inventory, balance, emails, has_read_email, evidence, triggered_emails, player_level
     if os.path.exists('savegame.pkl'):
         with open('savegame.pkl', 'rb') as f:
-            inventory, balance, emails, has_read_email, evidence, triggered_emails = pickle.load(f)
+            inventory, balance, emails, has_read_email, evidence, triggered_emails, player_level = pickle.load(f)
     else:
         # If the savegame file doesn't exist, set the default values
         inventory = []
         evidence = []
+        player_level = 1
         balance = 30000
         emails = [
             {
@@ -136,7 +138,7 @@ def game_settings():
     print_slow(Fore.GREEN + "| 3. Back to Main Menu                       |" + Style.RESET_ALL)
     print_slow(Fore.GREEN + "---------------------------------------------" + Style.RESET_ALL)
 
-    choice = input("\n> ")
+    choice = input(Fore.GREEN + "\n> " + Style.RESET_ALL)
 
     if choice.lower() == "background music":
         # Toggle background music
@@ -144,10 +146,14 @@ def game_settings():
         if bg_music_enabled:
             pygame.mixer.music.play(-1)
             print_slow(Fore.GREEN + "\nBackground Music Enabled" + Style.RESET_ALL)
+            time.sleep(1)
+            clear_terminal()
             game_settings()
         else:
             pygame.mixer.music.stop()
             print_slow(Fore.RED + "\nBackground Music Disabled" + Style.RESET_ALL)
+            time.sleep(1)
+            clear_terminal()
             game_settings()
     elif choice.lower() == "delete savegame":
         # Delete savegame
@@ -156,15 +162,23 @@ def game_settings():
             try:
                 os.remove("savegame.pkl")
                 print_slow(Fore.GREEN + "\nSavegame Deleted" + Style.RESET_ALL)
+                time.sleep(1)
+                clear_terminal()
                 game_settings()
             except FileNotFoundError:
                 print_slow(Fore.RED + "\nSavegame not found" + Style.RESET_ALL)
+                time.sleep(1)
+                clear_terminal()
                 game_settings()
     elif choice.lower() == "exit" or choice.lower() == "back to main menu":
         # Return to Main Menu
         print_slow(Fore.GREEN + "\nReturning to Main Menu..." + Style.RESET_ALL)
+        time.sleep(1)
+        clear_terminal()
     else:
         print_slow(Fore.RED + "\nInvalid choice, please try again." + Style.RESET_ALL)
+        time.sleep(1)
+        clear_terminal()
         game_settings()
 
 
@@ -232,6 +246,7 @@ def main():
             start_game()
         # Open game settings
         elif choice.lower() == "options":
+            clear_terminal()
             game_settings()
         # Exit the game
         elif choice.lower() == "exit":
@@ -257,6 +272,11 @@ def add_money(amount):
 def subtract_money(amount):
     global balance
     balance -= amount
+
+
+def add_level(level):
+    global player_level
+    player_level += level
 
 
 # Function to print the user's balance
@@ -331,13 +351,14 @@ def shop():
      |____/|_| |_|\__,_|___/_|\_\___/''' + Style.RESET_ALL)
 
     print_slow(Fore.YELLOW + "\nWelcome to the Hacker's Market!" + Style.RESET_ALL)
+    print("")
     print_slow(Fore.YELLOW + "Here you can buy upgrades to improve your hacking abilities.\n" + Style.RESET_ALL)
 
     while True:
         # Display the list of available upgrades
         for i, upgrade in enumerate(upgrades):
             print_slow(
-                Fore.YELLOW + f"{i + 1}. {upgrade['name']} - {upgrade['description']} - £{upgrade['price']}" + Style.RESET_ALL)
+                Fore.YELLOW + f"{upgrade['name']} - {upgrade['description']} - £{upgrade['price']}" + Style.RESET_ALL)
 
         # Get the user's choice
         command = input(Fore.YELLOW + "\n> " + Style.RESET_ALL)
@@ -373,6 +394,7 @@ def start_game():
     time.sleep(1)
     print_slow("\nLoading assets...")
     time.sleep(1)
+    clear_terminal()
     # Print a hint message to the user
     print_slow(Fore.MAGENTA + "\nHint:  Type 'help' to get a list of available commands." + Style.RESET_ALL)
 
@@ -433,6 +455,7 @@ def hack(system_name):
             if system['name'] == 'Markus' and has_item("CodeShatter"):
                 code_shatter_minigame()
                 markus_system_command_loop(markus_system)
+                add_level(player_level)
             else:
                 # Prompt the user for the password
                 password = input("Enter password: ")
@@ -445,6 +468,7 @@ def hack(system_name):
                     elif system['name'] == 'Markus':
                         # No need to check for CodeShatter again, as it's done above
                         markus_system_command_loop(markus_system)
+                        add_level(player_level)
                     else:
                         # Add more conditions for other systems
                         pass
@@ -561,11 +585,6 @@ def connect():
             elif command.lower().startswith("hack "):
                 target = command[5:]
                 hack(target)
-                if "--item codeshatter" in command.lower():
-                    # hack_with_codeshatter(target)
-                    pass
-                else:
-                    hack(target)
             # Display connect help message
             elif command.lower() == "help":
                 connect_help()
@@ -618,9 +637,6 @@ all_systems = [
     {"name": "Camera2", "type": "Camera", "level": 2, "password": "camera2"},
     {"name": "Server", "type": "Computer", "level": 3, "password": "server123"}
 ]
-
-# Current player level
-player_level = 1
 
 
 def amy_system_command_loop(system):
