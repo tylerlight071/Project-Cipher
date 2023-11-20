@@ -3,7 +3,6 @@ import pickle
 import colorama
 from colorama import Fore, Style
 import time
-from IPython.display import clear_output
 
 from components.help.help import system_help, shop_help, mail_help, help_user, connect_help
 from components.print_slow.print_slow import print_slow
@@ -561,15 +560,12 @@ def connect():
             # Hack into a system or vulnerability
             elif command.lower().startswith("hack "):
                 target = command[5:]
-<<<<<<< Updated upstream
                 hack(target)
-=======
                 if "--item codeshatter" in command.lower():
                     # hack_with_codeshatter(target)
                     pass
                 else:
                     hack(target)
->>>>>>> Stashed changes
             # Display connect help message
             elif command.lower() == "help":
                 connect_help()
