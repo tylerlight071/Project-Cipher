@@ -94,8 +94,11 @@ import os
 
 
 def camera_first():
-    print(camera_1)
-    move = input("> ")
+              print(camera_1)
+              print()
+              print()
+              move = input("> ")
+              
 
     if move.lower() == "forward":
         clear_terminal()
@@ -109,13 +112,35 @@ def camera_second():
     move = input("> ")
 
     if move.lower() == "forward":
-        pass
+              pass
+              #clear_terminal()
+              #camera_third()
+
     elif move.lower() == "back":
         clear_terminal()
         camera_first()
     else:
         print("Invalid command")
 
+def camera_third():
+              print(camera_3)
+              print()
+              print()
+              move = input("> ")
+              
+              if move.lower() == "forward":
+              clear_terminal()
+              camera_fourth()
+              
+              elif move.lower() == "back":
+              clear_terminal()
+              camera_second()
+
+def camera_fourth():
+              print(camera_4)
+              print()
+              print()
+              move = input("> ")
 
 def clear_terminal():
     os.system('cls' if os.name == 'nt' else 'clear')
