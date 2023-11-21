@@ -1,11 +1,15 @@
+import msvcrt
 import os
 import pickle
 import colorama
 from colorama import Fore, Style
 import time
+import subprocess
 
 from components.help.help import system_help, shop_help, mail_help, help_user, connect_help
 from components.print_slow.print_slow import print_slow
+from conversations.calls import first_call, second_call
+from conversations.minigame_calls import code_shatter_call
 from minigames.code_shatter_minigame import code_shatter_minigame
 from components.common_functions import clear_terminal
 
@@ -37,30 +41,30 @@ evidence = []
 amy_system = AmySystem()
 billy_system = BillySystem()
 markus_system = MarkusSystem()
-triggered_emails = []
 bg_music_enabled = True
 player_level = 1
 
 
 # Save the game state to a file
 def save_game():
-    global inventory, balance, emails, has_read_email, evidence, triggered_emails, player_level  # Add has_read_email here
+    global inventory, balance, emails, has_read_email, evidence, player_level  # Add has_read_email here
     with open('savegame.pkl', 'wb') as f:
-        pickle.dump((inventory, balance, emails, has_read_email, evidence, triggered_emails, player_level),
-                    f)  # Add has_read_email here
+        pickle.dump((inventory, balance, emails, has_read_email, evidence, player_level),
+                    f)
+
+    # Load the game state from a file
 
 
-# Load the game state from a file
 def load_game():
-    global inventory, balance, emails, has_read_email, evidence, triggered_emails, player_level
+    global inventory, balance, emails, has_read_email, evidence, player_level
     if os.path.exists('savegame.pkl'):
         with open('savegame.pkl', 'rb') as f:
-            inventory, balance, emails, has_read_email, evidence, triggered_emails, player_level = pickle.load(f)
+            inventory, balance, emails, has_read_email, evidence, player_level = pickle.load(f)
     else:
         # If the savegame file doesn't exist, set the default values
         inventory = []
-        evidence = []
         player_level = 1
+        evidence = []
         balance = 30000
         emails = [
             {
@@ -83,46 +87,6 @@ def load_game():
                     "May the odds be in your favor."
                 )
             },
-        ]
-        triggered_emails = [
-            {
-                "sender": "Prophet",
-                "recipient": "Cipher",
-                "subject": "First Piece of Evidence",
-                "body": "Good start, but we already have that information."
-                        "\nI have transferred you £20 for your troubles."
-                        "\n\nKeep digging Cipher!",
-                "evidence_item": 1
-            },
-            {
-                "sender": "Anonymous",
-                "recipient": "Cipher",
-                "subject": "Second Piece of Evidence",
-                "body": "Great job! You've found your second piece of evidence.",
-                "evidence_item": 2
-            },
-            {
-                "sender": "Anonymous",
-                "recipient": "Cipher",
-                "subject": "Third Piece of Evidence",
-                "body": "Fantastic! You've uncovered the third piece of evidence.",
-                "evidence_item": 3
-            },
-            {
-                "sender": "Anonymous",
-                "recipient": "Cipher",
-                "subject": "Fourth Piece of Evidence",
-                "body": "Excellent work! You've obtained the fourth piece of evidence.",
-                "evidence_item": 4
-            },
-            {
-                "sender": "Anonymous",
-                "recipient": "Cipher",
-                "subject": "Fifth Piece of Evidence",
-                "body": "Outstanding! You've secured the fifth piece of evidence.",
-                "evidence_item": 5
-            }
-            # Add more emails here as needed
         ]
 
 
@@ -197,6 +161,7 @@ def has_evidence(evidence_item):
 
 # Prints the games title
 def main():
+    clear_terminal()
     colorama.init()
     print_slow(Fore.GREEN + "---------------------------------------------" + Style.RESET_ALL)
     print_slow(Fore.GREEN + "  ____  _            _      _   _       _   " + Style.RESET_ALL)
@@ -285,7 +250,7 @@ def print_balance():
 
 
 # Function to read files and marks files as evidence
-def read_file(file_content, file_name, evidence_list):
+def read_file(file_content, file_name):
     global has_read_file, evidence
     global balance
 
@@ -300,7 +265,6 @@ def read_file(file_content, file_name, evidence_list):
             print("Adding evidence to the list...")
             print("")
             print_slow(Fore.GREEN + "Evidence Secured" + Style.RESET_ALL)
-            display_triggered_emails(triggered_emails)
 
     if file_name.lower() in ["meeting_minutes.txt"]:
         evidence_item = 5
@@ -309,7 +273,6 @@ def read_file(file_content, file_name, evidence_list):
             print("Adding evidence to the list...")
             print("")
             print_slow(Fore.GREEN + "Evidence Secured" + Style.RESET_ALL)
-            display_triggered_emails(triggered_emails)
 
     # Add more file names here as needed
 
@@ -326,12 +289,9 @@ def read_file(file_content, file_name, evidence_list):
 # List of available upgrades
 upgrades = [
     {"name": "EnigmaLink", "description": "Application required to connect to Enigma Corps network.", "price": 300},
-    {""},
     {"name": "CodeShatter", "description": "A powerful password breaker that can crack even the strongest passwords.",
      "price": 200},
-    {""},
     {"name": "EyeSpy", "description": "A privacy breaker to gain access to the smallest of cameras.", "price": 500},
-    {""},
     {"name": "Rift", "description": "Break the barrier between the Server and Network.", "price": 800}
 ]
 
@@ -355,7 +315,7 @@ def shop():
         # Display the list of available upgrades
         for i, upgrade in enumerate(upgrades):
             print_slow(
-                Fore.YELLOW + f"{upgrade['name']} - {upgrade['description']} - £{upgrade['price']}" + Style.RESET_ALL)
+                Fore.YELLOW + f"\n{upgrade['name']} - {upgrade['description']} - £{upgrade['price']}" + Style.RESET_ALL)
 
         # Get the user's choice
         command = input(Fore.YELLOW + "\n> " + Style.RESET_ALL)
@@ -376,6 +336,13 @@ def shop():
                         subtract_money(upgrade['price'])
                         print_balance()
                         add_to_inventory(upgrade['name'])
+
+                        # Check if the purchased upgrade is CodeShatter
+                        if upgrade_name.lower() == 'codeshatter':
+                            print_slow(Fore.GREEN + "Incoming Call..." + Style.RESET_ALL)
+                            input(Fore.GREEN + "> " + Style.RESET_ALL)
+                            code_shatter_call()
+
                     else:
                         print_slow(Fore.RED + "You don't have enough money to buy this upgrade." + Style.RESET_ALL)
                     break
@@ -443,6 +410,24 @@ def scan():
             print_slow(f"{system['name']} ({system['type']})")
 
 
+def getpass_star(prompt="Password: "):
+    print(prompt, end='', flush=True)
+    password = []
+    while True:
+        char = msvcrt.getch().decode('utf-8')
+        if char == '\r' or char == '\n':
+            break
+        elif char == '\b':  # Backspace
+            if password:
+                password.pop()
+                print('\b \b', end='', flush=True)
+        else:
+            password.append(char)
+            print('*', end='', flush=True)
+    print()  # Move to the next line
+    return ''.join(password)
+
+
 def hack(system_name):
     # Find the system in the all_systems list
     system = next((s for s in all_systems if s['name'].lower() == system_name.lower()), None)
@@ -458,7 +443,7 @@ def hack(system_name):
                 add_level(player_level)
             else:
                 # Prompt the user for the password
-                password = input("Enter password: ")
+                password = getpass_star("Enter password: ")
                 if password == system['password']:
                     print_slow(Fore.GREEN + "Access granted!" + Style.RESET_ALL)
                     if system['name'] == 'Amy':
@@ -466,7 +451,6 @@ def hack(system_name):
                     elif system['name'] == 'Billy':
                         billy_system_command_loop(billy_system)
                     elif system['name'] == 'Markus':
-                        # No need to check for CodeShatter again, as it's done above
                         markus_system_command_loop(markus_system)
                         add_level(player_level)
                     else:
@@ -487,7 +471,7 @@ def list_emails(emails):
         print_slow(Fore.LIGHTBLUE_EX + f"\n{email['subject']} - From: {email['sender']}" + Style.RESET_ALL)
 
 
-def read_email(emails, subject, triggered_emails):
+def read_email(emails, subject):
     global has_read_email, evidence
     global balance
     email_found = False
@@ -512,10 +496,13 @@ def read_email(emails, subject, triggered_emails):
             if email['subject'].lower() in ["professional development"]:
                 evidence_item = 2
                 if not has_evidence(evidence_item):
-                    add_evidence(evidence_item)
                     print("Adding evidence to the list...")
                     print("")
                     print_slow(Fore.GREEN + "Evidence Secured" + Style.RESET_ALL)
+                    add_evidence(evidence_item)
+                    print_slow(Fore.GREEN + "Incoming Call..." + Style.RESET_ALL)
+                    input(Fore.GREEN + "> " + Style.RESET_ALL)
+                    second_call()
 
             if email['subject'].lower() == "can't stop thinking about you" and email['sender'].lower() == 'amy':
                 evidence_item = 1
@@ -525,6 +512,9 @@ def read_email(emails, subject, triggered_emails):
                     print("")
                     print_slow(Fore.GREEN + "Evidence Secured" + Style.RESET_ALL)
                     add_evidence(evidence_item)
+                    print_slow(Fore.GREEN + "Incoming Call..." + Style.RESET_ALL)
+                    input(Fore.GREEN + "> " + Style.RESET_ALL)
+                    first_call()
             if email['subject'].lower() == "upcoming software update" and email['sender'].lower() == 'markus':
                 evidence_item = 6
                 if not has_evidence(evidence_item):
@@ -533,7 +523,6 @@ def read_email(emails, subject, triggered_emails):
                     print("")
                     print_slow(Fore.GREEN + "Evidence Secured" + Style.RESET_ALL)
                     add_evidence(evidence_item)
-                    display_triggered_emails(triggered_emails)
 
                     # Add money to balance based on the email subject
             if email['subject'].lower() == "professional development":
@@ -550,16 +539,6 @@ def read_email(emails, subject, triggered_emails):
 
     if not email_found:
         print_slow(Fore.RED + "\nNo email found with that subject, please try again." + Style.RESET_ALL)
-
-
-def display_triggered_emails(triggered_emails):
-    # Check the evidence count and display the triggered emails
-    for triggered_email in reversed(triggered_emails):
-        if len(evidence) >= triggered_email['evidence_item']:
-            time.sleep(3)
-            print_slow(
-                Fore.MAGENTA + f"\nFrom: {triggered_email['sender']}\nTo: {triggered_email['recipient']}\nSubject: {triggered_email['subject']}\n\n{triggered_email['body']}" + Style.RESET_ALL)
-            break
 
 
 def connect():
@@ -617,7 +596,7 @@ def mail():
         elif command.lower().startswith('r '):
             # Read email
             subject = command[2:]
-            read_email(emails, subject, triggered_emails)
+            read_email(emails, subject)
         elif command.lower() == 'help':
             # Display mail help message
             mail_help()
@@ -654,7 +633,7 @@ def amy_system_command_loop(system):
             file_name = command[2:]
             file_content = system.read_file(file_name)  # Store the file content in a variable
             if file_content:  # Check if the file was found
-                read_file(file_content, file_name, triggered_emails)  # Pass the file content to the read_file function
+                read_file(file_content, file_name)  # Pass the file content to the read_file function
         elif command.lower() == "mail":
             amy_mail()
         elif command.lower() == "help":
@@ -683,7 +662,7 @@ def amy_mail():
         elif command.lower().startswith('r '):
             # Read email
             subject = command[2:]
-            read_email(amy_system.emails, subject, triggered_emails)
+            read_email(amy_system.emails, subject)
         elif command.lower() == 'help':
             # Display mail help message
             mail_help()
@@ -707,7 +686,7 @@ def billy_system_command_loop(system):
             file_name = command[2:]
             file_content = system.read_file(file_name)  # Store the file content in a variable
             if file_content:  # Check if the file was found
-                read_file(file_content, file_name, triggered_emails)  # Pass the file content to the read_file function
+                read_file(file_content, file_name)  # Pass the file content to the read_file function
         elif command.lower() == "mail":
             billy_mail()
         elif command.lower() == "help":
@@ -735,7 +714,7 @@ def billy_mail():
         elif command.lower().startswith('r '):
             # Read email
             subject = command[2:]
-            read_email(billy_system.emails, subject, triggered_emails)
+            read_email(billy_system.emails, subject)
         elif command.lower() == 'help':
             # Display mail help message
             mail_help()
@@ -759,7 +738,7 @@ def markus_system_command_loop(system):
             file_name = command[2:]
             file_content = system.read_file(file_name)  # Store the file content in a variable
             if file_content:  # Check if the file was found
-                read_file(file_content, file_name, triggered_emails)  # Pass the file content to the read_file function
+                read_file(file_content, file_name)  # Pass the file content to the read_file function
         elif command.lower() == "mail":
             markus_mail()
         elif command.lower() == "help":
@@ -788,7 +767,7 @@ def markus_mail():
         elif command.lower().startswith('r '):
             # Read email
             subject = command[2:]
-            read_email(markus_system.emails, subject, triggered_emails)
+            read_email(markus_system.emails, subject)
         elif command.lower() == 'help':
             # Display mail help message
             mail_help()

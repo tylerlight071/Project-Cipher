@@ -70,6 +70,14 @@ def connect_help():
     print_slow("[disconnect] - Use the 'disconnect' command to disconnect from the current system or vulnerability.")
 
 
+def print_box(text):
+    border = '+' + '-' * (len(text) + 2) + '+'
+    content = f"| {text} |"
+    print(border)
+    print(Fore.GREEN + content + Style.RESET_ALL)
+    print(border)
+
+
 # Makes the text have a delay of (x) when printed to screen
 def print_slow(text, delay=0.00):  # change to 0.01
     for char in text:
@@ -80,5 +88,3 @@ def print_slow(text, delay=0.00):  # change to 0.01
 
 def clear_terminal():
     os.system('cls' if os.name == 'nt' else 'clear')
-
-
