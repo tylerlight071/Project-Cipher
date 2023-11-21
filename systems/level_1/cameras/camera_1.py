@@ -1,4 +1,4 @@
-camera_1 = """,,,,,,,,/,,,,,,,,,,,,,,,/,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,*****************,******
+ """,,,,,,,,/,,,,,,,,,,,,,,,/,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,*****************,******
 ,,,,,,,,,*/,,,,,,,******,,/,,,,,,,,,,,,,,,,,,,,,,,*,**********************,,,,,,,,,,,,,,,,,,,,******************/*******
 ,,****,,,,,,/*************,*,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,/**********************/***
 **********,,,*/**************,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,*,,**,****,,,,*/***************************
@@ -91,59 +91,66 @@ camera_2 = """##(((//,///***(%#(%%%%%%%%%%%%%%%%%%%%%%%&&&&&&&&&%%#%%&&&&&&&&&&&
 /*,,,**,,//**###((/(/((/(((##(((((/#((((/##(((#/(##((/#((((((((#((#%(#*///#/(/((#*######((//(///////*///(/////*/**/////,*////////////////**/((#####(#/*/(((((((/*/*///((((((///*/**,"""
 
 import os
-
+import time
+import colorama
+from colorama import Fore, Style
 
 def camera_first():
-              print(camera_1)
-              print()
-              print()
-              move = input("> ")
-              
+  print(camera_1)
+  print()
+  print()
+  move = input(Fore.GREEN + "> " + Style.RESET_ALL)
 
-    if move.lower() == "forward":
-        clear_terminal()
-        camera_second()
-    elif move.lower() == "back":
-        print("There is nothing to go back to...")
+  if move.lower() == "forward":
+    clear_terminal()
+    camera_second()
+  elif move.lower() == "back":
+    print(Fore.RED + "There is nothing to go back to..." + Style.RESET_ALL)
+    time.sleep(2)
+    clear_terminal()
+    camera_first()
 
 
 def camera_second():
-    print(camera_2)
-    move = input("> ")
+  print(camera_2)
+  move = input("> ")
 
-    if move.lower() == "forward":
-              pass
-              #clear_terminal()
-              #camera_third()
+  if move.lower() == "forward":
+    pass
+    #clear_terminal()
+    #camera_third()
 
-    elif move.lower() == "back":
-        clear_terminal()
-        camera_first()
-    else:
-        print("Invalid command")
+  elif move.lower() == "back":
+    clear_terminal()
+    camera_first()
+  else:
+    print("Invalid command")
+
 
 def camera_third():
-              print(camera_3)
-              print()
-              print()
-              move = input("> ")
-              
-              if move.lower() == "forward":
-              clear_terminal()
-              camera_fourth()
-              
-              elif move.lower() == "back":
-              clear_terminal()
-              camera_second()
+  #print(camera_3)
+  print()
+  print()
+  move = input("> ")
+
+  if move.lower() == "forward":
+    clear_terminal()
+    camera_fourth()
+
+  elif move.lower() == "back":
+    clear_terminal()
+    camera_second()
+
 
 def camera_fourth():
-              print(camera_4)
-              print()
-              print()
-              move = input("> ")
+  #print(camera_4)
+  print()
+  print()
+  move = input("> ")
+
 
 def clear_terminal():
-    os.system('cls' if os.name == 'nt' else 'clear')
+  os.system('cls' if os.name == 'nt' else 'clear')
 
 
 camera_first()
