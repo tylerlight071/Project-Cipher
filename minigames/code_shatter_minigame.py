@@ -1,10 +1,10 @@
 import random
 from colorama import Fore, Style
-from components.print_slow.print_slow import print_slow
+from components.common_functions import print_slow
 
 
 def code_shatter_minigame():
-    print("Debug: Entering CodeShatter MiniGame")
+    print_slow("Debug: Entering CodeShatter MiniGame")
     # Generate a random 5-digit number
     target = [str(random.randint(1, 9)) for _ in range(5)]
 
@@ -42,7 +42,7 @@ def code_shatter_minigame():
             else:
                 feedback.append(Fore.RED + guess[i] + Style.RESET_ALL)
 
-        print("Feedback: " + " ".join(feedback))
+        print_slow("Feedback: " + " ".join(feedback))
 
         # Check if the guess is correct
         if guess == "".join(target):

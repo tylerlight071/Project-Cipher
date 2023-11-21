@@ -1,5 +1,6 @@
 import random
 import string
+from components.common_functions import print_slow
 
 
 def generate_password(length):
@@ -30,9 +31,9 @@ def display_key_map(shift):
 
     key_map = dict(zip(all_chars, decrypted_chars))
 
-    print("Key Map:")
+    print_slow("Key Map:")
     for encrypted, decrypted in key_map.items():
-        print(f"{encrypted} -> {decrypted}")
+        print_slow(f"{encrypted} -> {decrypted}")
 
     return key_map
 
@@ -48,8 +49,8 @@ encrypted_password = encrypt(server_password, shift_value)
 key_map = display_key_map(shift_value)
 
 # Step 4: Present the challenge
-print("\nYou need to decrypt the following password to access the server:")
-print(encrypted_password)
+print_slow("\nYou need to decrypt the following password to access the server:")
+print_slow(encrypted_password)
 
 # Step 5: User input and decryption attempt
 user_attempt = input("\nEnter your decryption attempt: ")
@@ -57,6 +58,6 @@ decrypted_attempt = ''.join(key_map.get(char, char) for char in user_attempt)
 
 # Step 6: Check for success
 if decrypted_attempt == server_password:
-    print("Access granted! You successfully decrypted the password.")
+    print_slow("Access granted! You successfully decrypted the password.")
 else:
-    print("Access denied. Incorrect decryption attempt.")
+    print_slow("Access denied. Incorrect decryption attempt.")

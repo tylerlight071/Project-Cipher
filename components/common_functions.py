@@ -1,81 +1,83 @@
 import time
 import os
 from colorama import Fore, Style
-from components.print_slow.print_slow import print_slow
-import sys
-import subprocess
 
 
 # Function to display help message
 def help_user():
     print_slow(Fore.MAGENTA + "Help:" + Style.RESET_ALL)
-    print("")
+    print_slow("")
     print_slow("[connect] - Use the 'connect' command to hack into Enigma Corps network.")
-    print("")
+    print_slow("")
     print_slow("[mail] - Use the 'mail' command to view and respond to emails from your client and other characters.")
-    print("")
+    print_slow("")
     print_slow("[balance] - Use the 'balance' command to view your current earnings which you can spend on upgrades. ")
-    print("")
+    print_slow("")
     print_slow("[shop] - Use the 'shop' command to view upgrades available in the shop. ")
-    print("")
+    print_slow("")
     print_slow("[clear] - Use the 'clear' command to clear the terminal.")
-    print("")
+    print_slow("")
     print_slow("[help] - Use the 'help' command if you need assistance at any time.")
-    print("")
+    print_slow("")
     print_slow("[exit] - Use the 'exit' command to return to the Main Menu.")
+    print_slow("")
 
 
 def mail_help():
     print_slow(Fore.LIGHTBLUE_EX + "Mail Help:" + Style.RESET_ALL)
-    print("")
+    print_slow("")
     print_slow("[l] - Use the 'l' command to list all emails.")
-    print("")
+    print_slow("")
     print_slow("[r] - Use the 'r [subject]' command to read an email with the specified subject.")
-    print("")
+    print_slow("")
     print_slow("[clear] - Use the 'clear' command to clear the terminal.")
-    print("")
+    print_slow("")
     print_slow("[exit] - Use the 'exit' command to return to the main terminal.")
+    print_slow("")
 
 
 def shop_help():
     print_slow(Fore.YELLOW + "Shop Help:" + Style.RESET_ALL)
-    print("")
+    print_slow("")
     print_slow("[buy] - Use the 'buy [upgrade]' command to purchase the upgrade in the shop. ")
-    print("")
+    print_slow("")
     print_slow("[clear] - Use the 'clear' command to clear the terminal.")
-    print("")
+    print_slow("")
     print_slow("[exit] - Use the 'exit' command to return to the main terminal.")
+    print_slow("")
 
 
 def system_help():
-    print("")
-    print("[mail] - Use the 'mail' command to log into the users emails.")
-    print("")
+    print_slow("")
+    print_slow("[mail] - Use the 'mail' command to log into the users emails.")
+    print_slow("")
     print_slow("[l] - Use the 'l' command to list files in a users system.")
-    print("")
+    print_slow("")
     print_slow("[clear] - Use the 'clear' command to clear the terminal.")
-    print("")
+    print_slow("")
     print_slow("[r] - Use the 'r [file]' command to read files in a users system")
+    print_slow("")
 
 
 def connect_help():
     print_slow(Fore.MAGENTA + "Connect Help:" + Style.RESET_ALL)
     print_slow(
         "[scan] - Use the 'scan' command to scan the network and search for available systems and vulnerabilities.")
-    print("")
+    print_slow("")
     print_slow("[hack] - Use the 'hack [system/vulnerability]' to hack into different systems.")
-    print("")
+    print_slow("")
     print_slow("[clear] - Use the 'clear' command to clear the terminal.")
-    print("")
+    print_slow("")
     print_slow("[disconnect] - Use the 'disconnect' command to disconnect from the current system or vulnerability.")
+    print_slow("")
 
 
 def print_box(text):
     border = '+' + '-' * (len(text) + 2) + '+'
     content = f"| {text} |"
-    print(border)
-    print(Fore.GREEN + content + Style.RESET_ALL)
-    print(border)
+    print_slow(border)
+    print_slow(Fore.GREEN + content + Style.RESET_ALL)
+    print_slow(border)
 
 
 # Makes the text have a delay of (x) when printed to screen

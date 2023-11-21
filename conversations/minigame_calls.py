@@ -5,11 +5,11 @@ from colorama import Fore, Style
 
 def code_shatter_call():
     clear_terminal()
-    print(sender_art)
-    print()
-    print()
+    print_slow(sender_art)
+    print_slow("")
+    print_slow("")
     print_box("Anonymous")
-    print()
+    print_slow("")
     print_slow(Fore.YELLOW + "I see you have bought CodeShatter!")
     print_slow("This item is a one time use upgrade so once you get the password, it is gone so use wisely!")
     print_slow("But don't threat, if you fail, you get a chance to retry. The item is only used when you get the password, so be sure to write it down!" + Style.RESET_ALL)
