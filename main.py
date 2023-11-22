@@ -474,6 +474,7 @@ def start_game():
         # Save the game state
         save_game()
 
+
 # Function to check if an item is in the inventory
 def has_item(item):
     return item in inventory
