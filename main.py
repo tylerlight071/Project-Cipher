@@ -453,6 +453,8 @@ def start_game():
         # Display help message
         elif command.lower() == "help":
             help_user()
+        elif command.lower() == "remove":
+            remove_from_inventory(item="CodeShatter")
         # Check balance
         elif command.lower() == "balance":
             print_balance()
@@ -471,7 +473,6 @@ def start_game():
 
         # Save the game state
         save_game()
-
 
 # Function to check if an item is in the inventory
 def has_item(item):
