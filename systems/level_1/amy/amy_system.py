@@ -1,3 +1,6 @@
+from components.common_functions import print_slow
+
+
 class AmySystem:
     def __init__(self):
         self.files = [
@@ -92,11 +95,11 @@ class AmySystem:
                     "Hey Billy,\n\n"
                     "I hope this message finds you in good spirits. I've been meaning to write to you for a while now, but I couldn't find the right words to express what I've been feeling.\n\n"
                     "Ever since that night we spent together, I can't seem to get you out of my mind. There's something about the way you make me feel that I've never experienced before. "
-                    "It's exhilarating, yet terrifying all at the same time.\n\n"
+                    "\nIt's exhilarating, yet terrifying all at the same time.\n\n"
                     "I know we both have a lot on our plates right now, and I don't want to add any more stress to your life. But I can't help but wonder what could happen if we gave this a real shot. "
                     "I know it's complicated, and there are a lot of factors to consider, but I think we owe it to ourselves to explore this connection we have.\n\n"
                     "I understand if you're not ready to take that step, and I don't want to pressure you into anything you're not comfortable with. "
-                    "But I can't shake the feeling that we could have something truly special together.\n\n"
+                    "\nBut I can't shake the feeling that we could have something truly special together.\n\n"
                     "I'd love to hear your thoughts on this, and I'm more than willing to take things slow if that's what you need. Maybe we could meet up for dinner and talk about it in person?"
                     " I think it would be easier to have this conversation face-to-face.\n\n"
                     "I hope you're doing well, and I look forward to hearing from you soon.\n\n"
@@ -109,9 +112,12 @@ class AmySystem:
                 "subject": "Need Your Help on the Smith Project",
                 "body": (
                     "Hi Billy,\n\n"
-                    "I hope this email finds you well. I wanted to reach out and ask for your help on the Smith project. I've been having some trouble with the data analysis portion, and I know you have a lot of experience in that area.\n\n"
-                    "The project involves analyzing customer feedback data to identify trends and areas for improvement. I've been working on it for a few weeks now, but I'm finding it challenging to make sense of the data and draw meaningful conclusions.\n\n"
-                    "Would you be available for a quick meeting later this week to go over some of the data with me? I would really appreciate your input and guidance on this. I think your expertise could really help me make progress and ensure the success of the project.\n\n"
+                    "I hope this email finds you well. I wanted to reach out and ask for your help on the Smith project. I've been having some trouble with the data analysis portion,"
+                    "\nand I know you have a lot of experience in that area.\n\n"
+                    "The project involves analyzing customer feedback data to identify trends and areas for improvement. I've been working on it for a few weeks now, but I'm finding it challenging to make sense of the data and"
+                    "\ndraw meaningful conclusions.\n\n"
+                    "Would you be available for a quick meeting later this week to go over some of the data with me? I would really appreciate your input and guidance on this. "
+                    "\nI think your expertise could really help me make progress and ensure the success of the project.\n\n"
                     "If you're available, please let me know your preferred date and time, and I'll send out a calendar invite. I'm flexible and can work around your schedule.\n\n"
                     "Thank you in advance for your help, and I look forward to hearing from you soon.\n\n"
                     "Best,\n"
@@ -126,7 +132,8 @@ class AmySystem:
                     "I hope this email finds you well. I wanted to request some time off next month for a family vacation. I am planning to be out of the office from 10/09/2024 to 18/09/2024\n\n"
                     "I have been working hard on the Johnson project and have made significant progress. I will make sure to finish up any outstanding work and hand off any ongoing projects to my colleagues before I leave. I will also be available by email in case of any urgent matters.\n\n"
                     "I understand that this is a busy time for the team, and I want to ensure that my absence doesn't cause any disruptions. I have already spoken to Markus and he has kindly agreed to cover for me while I'm away.\n\n"
-                    "Thank you for considering my request. I look forward to spending some quality time with my family and coming back to work refreshed and recharged. I am confident that the time off will help me come back with renewed energy and focus.\n\n"
+                    "Thank you for considering my request. I look forward to spending some quality time with my family and coming back to work refreshed and recharged."
+                    "\nI am confident that the time off will help me come back with renewed energy and focus.\n\n"
                     "Best,\n"
                     "Amy"
                 )
@@ -152,9 +159,8 @@ class AmySystem:
                     "Hey Billy,\n\n"
                     "I wanted to take a moment to express my gratitude for allowing me to use your computer while mine was being serviced by IT. "
                     "It was a huge help and allowed me to stay productive during that time.\n\n"
-                    "I also noticed that your password is 'football'. While I understand it's easy to remember, it's important to choose\n"
-                    "a more secure password to protect your accounts. "
-                    "I would recommend changing it to something more complex and unique. You never know who's watching after all.\n\n"
+                    "I also noticed that your password is 'football'. While I understand it's easy to remember, it's important to choose a more secure password to protect your accounts."
+                    "\nI would recommend changing it to something more complex and unique. You never know who's watching after all.\n\n"
                     "Thanks again for your generosity and understanding.\n\n"
                     "Best,\n"
                     "Amy"
@@ -163,9 +169,9 @@ class AmySystem:
         ]
 
     def list_files(self):
-        print("\nFiles:")
+        print_slow("\nFiles:")
         for file in self.files:
-            print(f"\n{file['name']}")
+            print_slow(f"\n{file['name']}")
 
     def read_file(self, file_name):
         file_found = False
@@ -175,17 +181,17 @@ class AmySystem:
                 return file['content']
 
         if not file_found:
-            print("\nNo file found with that name, please try again.")
+            print_slow("\nNo file found with that name, please try again.")
             return None
 
     def list_emails(self):
-        print("\nEmails:")
+        print_slow("\nEmails:")
         for i, email in enumerate(self.emails):
-            print(f"\n{email['subject']} - From: {email['sender']}")
+            print_slow(f"\n{email['subject']} - From: {email['sender']}")
 
     def read_email(self, subject):
         for email in self.emails:
             if email['subject'].lower() == subject.lower():
-                print(f"\nFrom: {email['sender']}\nSubject: {email['subject']}\n\n{email['body']}")
+                print_slow(f"\nFrom: {email['sender']}\nSubject: {email['subject']}\n\n{email['body']}")
                 return
-        print("\nNo email found with that subject, please try again.")
+        print_slow("\nNo email found with that subject, please try again.")

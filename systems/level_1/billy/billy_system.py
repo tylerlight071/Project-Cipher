@@ -1,4 +1,6 @@
 # billy_system.py
+from components.common_functions import print_slow
+
 
 class BillySystem:
     def __init__(self):
@@ -57,7 +59,7 @@ class BillySystem:
                     "Location: REDACTED\n"
                     "Attendees: Amy, REDACTED, Billy, Kyle, REDACTED, REDACTED, REDACTED\n\n"
                     "Agenda:\n"
-                    "- Discuss progress on Project X\n"
+                    "- Discuss progress on Project REDACTED\n"
                     "- Review safety protocols for handling sensitive materials\n"
                     "- Plan next steps for research and development\n\n"
                     "Action Items:\n"
@@ -174,9 +176,9 @@ class BillySystem:
         ]
 
     def list_files(self):
-        print("\nFiles:")
+        print_slow("\nFiles:")
         for file in self.files:
-            print(f"\n{file['name']}")
+            print_slow(f"\n{file['name']}")
 
     def read_file(self, file_name):
         file_found = False
@@ -186,19 +188,19 @@ class BillySystem:
                 return file['content']
 
         if not file_found:
-            print("\nNo file found with that name, please try again.")
+            print_slow("\nNo file found with that name, please try again.")
             return None
 
     def list_emails(self):
-        print("\nEmails:")
+        print_slow("\nEmails:")
         for i, email in enumerate(self.emails):
-            print(f"\n{email['subject']} - From: {email['sender']}")
+            print_slow(f"\n{email['subject']} - From: {email['sender']}")
 
     def read_email(self, subject):
         for email in self.emails:
             if email['subject'].lower() == subject.lower():
-                print(f"\nFrom: {email['sender']}\nSubject: {email['subject']}\n\n{email['body']}")
+                print_slow(f"\nFrom: {email['sender']}\nSubject: {email['subject']}\n\n{email['body']}")
                 return
-        print("\nNo email found with that subject, please try again.")
+        print_slow("\nNo email found with that subject, please try again.")
 
 
