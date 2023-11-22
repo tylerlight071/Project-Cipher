@@ -42,29 +42,33 @@ billy_system = BillySystem()
 markus_system = MarkusSystem()
 bg_music_enabled = True
 player_level = 1
+has_started_game = False
 
 
 # Save the game state to a file
 def save_game():
-    global inventory, balance, emails, has_read_email, evidence, player_level, has_intro_call  # Add has_read_email here
+    global inventory, balance, emails, has_read_email, evidence, player_level, has_intro_call, has_started_game  # Add has_read_email here
     with open('savegame.pkl', 'wb') as f:
-        pickle.dump((inventory, balance, emails, has_read_email, evidence, player_level, has_intro_call),
-                    f)
+        pickle.dump(
+            (inventory, balance, emails, has_read_email, evidence, player_level, has_intro_call, has_started_game),
+            f)
 
     # Load the game state from a file
 
 
 def load_game():
-    global inventory, balance, emails, has_read_email, evidence, player_level, has_intro_call
+    global inventory, balance, emails, has_read_email, evidence, player_level, has_intro_call, has_started_game
     if os.path.exists('savegame.pkl'):
         with open('savegame.pkl', 'rb') as f:
-            inventory, balance, emails, has_read_email, evidence, player_level, has_intro_call = pickle.load(f)
+            inventory, balance, emails, has_read_email, evidence, player_level, has_intro_call, has_started_game = pickle.load(
+                f)
     else:
         # If the savegame file doesn't exist, set the default values
         inventory = []
         player_level = 1
         evidence = []
         has_intro_call = False
+        has_started_game = False
         balance = 30000
         emails = [
             {
@@ -147,6 +151,7 @@ def game_settings():
     print_slow(Fore.GREEN + "|                                            |" + Style.RESET_ALL)
     print_slow(
         Fore.GREEN + f"|  [Background Music]   {'Enabled              |' if bg_music_enabled else 'Disabled           |'}" + Style.RESET_ALL)
+    print_slow(Fore.GREEN + "|                                            |" + Style.RESET_ALL)
     print_slow(Fore.GREEN + "|  [Delete Savegame]                         |" + Style.RESET_ALL)
     print_slow(Fore.GREEN + "|                                            |" + Style.RESET_ALL)
     print_slow(Fore.GREEN + "|  [Back to Main Menu]                       |" + Style.RESET_ALL)
@@ -384,100 +389,133 @@ def shop():
             print_slow(Fore.YELLOW + "\nExiting Hacker's Market" + Style.RESET_ALL)
             time.sleep(1)
             clear_terminal()
-            break
+            start_game()
         elif command.lower() == 'help':
             shop_help()
         elif command.lower().startswith('buy '):
             upgrade_name = command[4:]
-            for upgrade in upgrades:
-                if upgrade_name.lower() == upgrade['name'].lower():
-                    if get_balance() >= upgrade['price']:
-                        print_slow("")
-                        print_slow(
-                            Fore.GREEN + f"You have successfully purchased {upgrade['name']} for ${upgrade['price']}!" + Style.RESET_ALL)
-                        subtract_money(upgrade['price'])
-                        print_slow("")
-                        print_balance()
-                        add_to_inventory(upgrade['name'])
-                        time.sleep(2)
-                        clear_terminal()
-                        shop()
+            if has_item('EnigmaLink'):
+                if upgrade_name.lower() == 'enigmalink':
+                    print_slow("")
+                    print_slow(Fore.RED + "Sold Out" + Style.RESET_ALL)
+                    time.sleep(1)
+                    clear_terminal()
+                    shop()
+                else:
+                    for upgrade in upgrades:
+                        if upgrade_name.lower() == upgrade['name'].lower():
+                            if get_balance() >= upgrade['price']:
+                                print_slow("")
+                                print_slow(
+                                    Fore.GREEN + f"You have successfully purchased {upgrade['name']} for ${upgrade['price']}!" + Style.RESET_ALL)
+                                subtract_money(upgrade['price'])
+                                print_slow("")
+                                print_balance()
+                                add_to_inventory(upgrade['name'])
+                                time.sleep(2)
+                                clear_terminal()
+                                shop()
+                                # Check if the purchased upgrade is CodeShatter
+                                if upgrade_name.lower() == 'codeshatter':
+                                    print_slow("")
+                                    print_slow(Fore.GREEN + "Incoming Call..." + Style.RESET_ALL)
+                                    input(Fore.GREEN + "> " + Style.RESET_ALL)
+                                    code_shatter_call()
 
-                        # Check if the purchased upgrade is CodeShatter
-                        if upgrade_name.lower() == 'codeshatter':
-                            print_slow("")
-                            print_slow(Fore.GREEN + "Incoming Call..." + Style.RESET_ALL)
-                            input(Fore.GREEN + "> " + Style.RESET_ALL)
-                            code_shatter_call()
-
+                                shop()
+                            else:
+                                print_slow(
+                                    Fore.RED + "You don't have enough money to buy this upgrade." + Style.RESET_ALL)
+                            break
                     else:
-                        print_slow(Fore.RED + "You don't have enough money to buy this upgrade." + Style.RESET_ALL)
-                    break
+                        print_slow(Fore.RED + "Invalid choice, please try again." + Style.RESET_ALL)
+
             else:
-                print_slow(Fore.RED + "Invalid choice, please try again." + Style.RESET_ALL)
+                for upgrade in upgrades:
+                    if upgrade_name.lower() == upgrade['name'].lower():
+                        if get_balance() >= upgrade['price']:
+                            print_slow("")
+                            print_slow(
+                                Fore.GREEN + f"You have successfully purchased {upgrade['name']} for ${upgrade['price']}!" + Style.RESET_ALL)
+                            subtract_money(upgrade['price'])
+                            print_slow("")
+                            print_balance()
+                            add_to_inventory(upgrade['name'])
+                            time.sleep(2)
+                            clear_terminal()
+                            shop()
         else:
             print_slow(Fore.RED + "Invalid choice, please try again." + Style.RESET_ALL)
 
 
 # Function to start the game
 def start_game():
-    global has_intro_call
-    print_slow("\nStarting game...")
-    time.sleep(1)
-    print_slow("\nLoading assets...")
-    time.sleep(1)
-    clear_terminal()
+    global has_intro_call, has_started_game
 
     if has_intro_call:
+        clear_terminal()
         pass
     else:
+        print_slow("\nStarting game...")
+        time.sleep(1)
+        print_slow("\nLoading assets...")
+        time.sleep(1)
+        clear_terminal()
+
         print_slow(Fore.GREEN + "Incoming Call..." + Style.RESET_ALL)
         input(Fore.GREEN + "> " + Style.RESET_ALL)
         intro_call()
         has_intro_call = True
+        has_started_game = True
+        print_slow(Fore.MAGENTA + "\nHint:  Type 'help' to get a list of available commands." + Style.RESET_ALL)
         pass
 
-    # Print a hint message to the user
-    print_slow(Fore.MAGENTA + "\nHint:  Type 'help' to get a list of available commands." + Style.RESET_ALL)
-
     # Game command loop
-    while True:
-        command = input(Fore.GREEN + "> " + Style.RESET_ALL)
+    command = input(Fore.GREEN + "> " + Style.RESET_ALL)
 
-        # Connect to the network
-        if command.lower() == "connect":
-            connect()
-        # Access the mail system
-        elif command.lower() == "mail":
-            mail()
-        # Display help message
-        elif command.lower() == "help":
-            help_user()
-        elif command.lower() == "remove":
-            remove_from_inventory(item="CodeShatter")
-        # Check balance
-        elif command.lower() == "balance":
-            print_balance()
-        # Enter shop
-        elif command.lower() == "shop":
-            shop()
-        # Clear terminal
-        elif command.lower() == "clear":
-            clear_terminal()
-        # Return to the main menu
-        elif command.lower() == "exit":
-            print_slow("Returning to Main Menu...")
-            break
-        else:
-            print_slow("Invalid command, please try again.")
+    # Connect to the network
+    if command.lower() == "connect":
+        connect()
+    # Access the mail system
+    elif command.lower() == "mail":
+        mail()
+    # Display help message
+    elif command.lower() == "help":
+        help_user()
+    elif command.lower() == "remove":
+        remove_from_inventory(item="CodeShatter")
+    # Check balance
+    elif command.lower() == "balance":
+        print_balance()
+    # Enter shop
+    elif command.lower() == "shop":
+        shop()
+    # Clear terminal
+    elif command.lower() == "clear":
+        clear_terminal()
+    # Return to the main menu
+    elif command.lower() == "exit":
+        print_slow("Returning to Main Menu...")
+        time.sleep(1)
+        main()
+    else:
+        print_slow("Invalid command, please try again.")
+        time.sleep(1)
+        clear_terminal()
+        start_game()
 
-        # Save the game state
-        save_game()
+    # Save the game state
+    save_game()
 
 
 # Function to check if an item is in the inventory
 def has_item(item):
     return item in inventory
+
+
+def show_items():
+    global inventory
+    print_slow(inventory)
 
 
 def scan():
@@ -526,6 +564,7 @@ def hack(system_name):
                 clear_terminal()
                 markus_system_command_loop(markus_system)
                 add_level(player_level)
+                remove_from_inventory(item="CodeShatter")
             else:
                 # Prompt the user for the password
                 print_slow("")
@@ -705,7 +744,7 @@ def mail():
             # Exit mail system
             print_slow(Fore.LIGHTBLUE_EX + "\nExiting Mail System..." + Style.RESET_ALL)
             print_slow("")
-            break
+            start_game()
         else:
             print_slow(Fore.RED + "\nInvalid command, please try again." + Style.RESET_ALL)
 
