@@ -1,6 +1,7 @@
 import msvcrt
 import os
 import pickle
+import sys
 import time
 import colorama
 
@@ -270,7 +271,7 @@ def main():
         elif choice.lower() == "exit":
             print_slow(Fore.GREEN + "\nExiting..." + Style.RESET_ALL)
             pygame.mixer.music.stop()
-            break
+            sys.exit()
         else:
             print_slow(Fore.RED + "\nInvalid choice, please try again." + Style.RESET_ALL)
             time.sleep(2)
@@ -741,7 +742,7 @@ def connect():
                 print_slow("Connection terminated.")
                 print_slow("")
                 time.sleep(1)
-                main()
+                start_game()
             else:
                 print_slow("Invalid command, please try again.")
     else:
@@ -860,6 +861,7 @@ def billy_system_command_loop(system):
 
         if command.lower() == "l":
             system.list_files()
+            print_slow("")
         elif command.lower().startswith("r "):
             file_name = command[2:]
             file_content = system.read_file(file_name)  # Store the file content in a variable

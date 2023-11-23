@@ -6,7 +6,6 @@ from components.common_functions import print_slow, clear_terminal
 
 
 def code_shatter_minigame():
-    print_slow("Debug: Entering CodeShatter MiniGame")
     # Generate a random 5-digit number
     target = [str(random.randint(1, 9)) for _ in range(5)]
 
@@ -55,6 +54,6 @@ def code_shatter_minigame():
         time.sleep(1)
         print_slow("")
         print_slow(Fore.RED + "Rebooting CodeShatter with new proxy..." + Style.RESET_ALL)
-        print("")
+        time.sleep(1)
         clear_terminal()
         code_shatter_minigame()
