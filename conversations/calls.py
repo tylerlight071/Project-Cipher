@@ -280,7 +280,7 @@ def fifth_call():
     print_slow(
         Fore.YELLOW + "Cipher, we've intercepted some Meeting Minutes dated 24/06/2025. It's related to 'Project X' and involves key players.")
     print_slow(
-        "This could be our chance to uncover more about Enigma's activities. Let's dive into the details and see what we can extract.")
+        "This could be our chance to uncover more about Enigma's activities. Let's dive into the details and see what we can extract." + Style.RESET_ALL)
     print_slow("")
     input("Press [Enter] to continue: ")
     clear_terminal()
@@ -335,3 +335,7 @@ def fifth_call():
     print_slow(Fore.RED + "Line Disconnected..." + Style.RESET_ALL)
     input("Press [Enter] to continue: ")
     clear_terminal()
+
+
+def sixth_call():
+    print_slow("ADD CALL STUFF HERE")

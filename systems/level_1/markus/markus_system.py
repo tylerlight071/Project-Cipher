@@ -124,6 +124,7 @@ class MarkusSystem:
         print_slow("\nFiles:")
         for file in self.files:
             print_slow(f"\n{file['name']}")
+            print_slow("")
 
     def read_file(self, file_name):
         file_found = False

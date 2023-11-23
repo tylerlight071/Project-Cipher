@@ -8,7 +8,7 @@ from colorama import Fore, Style
 
 from components.common_functions import clear_terminal, print_slow, shop_help, help_user, connect_help, mail_help, \
     system_help
-from conversations.calls import intro_call, first_call, second_call, third_call, fourth_call, fifth_call
+from conversations.calls import intro_call, first_call, second_call, third_call, fourth_call, fifth_call, sixth_call
 from conversations.minigame_calls import code_shatter_call
 from minigames.code_shatter_minigame import code_shatter_minigame
 from systems.level_1.amy.amy_system import AmySystem
@@ -148,7 +148,6 @@ def game_settings():
     print_slow("")
     print_slow("")
     print_slow(Fore.GREEN + " --------------------------------------------" + Style.RESET_ALL)
-    print_slow(Fore.GREEN + "|                                            |" + Style.RESET_ALL)
     print_slow(
         Fore.GREEN + f"|  [Background Music]   {'Enabled              |' if bg_music_enabled else 'Disabled           |'}" + Style.RESET_ALL)
     print_slow(Fore.GREEN + "|                                            |" + Style.RESET_ALL)
@@ -353,9 +352,9 @@ def read_file(file_content, file_name):
 
 # List of available upgrades
 upgrades = [
-    {"name": "EnigmaLink", "description": "Application required to connect to Enigma Corps network.", "price": 300},
+    {"name": "EnigmaLink", "description": "Application required to connect to Enigma Corps network.", "price": 100},
     {"name": "CodeShatter", "description": "A powerful password breaker that can crack even the strongest passwords.",
-     "price": 200},
+     "price": 250},
     {"name": "EyeSpy", "description": "A privacy breaker to gain access to the smallest of cameras.", "price": 500},
     {"name": "Rift", "description": "Break the barrier between the Server and Network.", "price": 800}
 ]
@@ -414,22 +413,27 @@ def shop():
                                 add_to_inventory(upgrade['name'])
                                 time.sleep(2)
                                 clear_terminal()
-                                shop()
                                 # Check if the purchased upgrade is CodeShatter
                                 if upgrade_name.lower() == 'codeshatter':
                                     print_slow("")
                                     print_slow(Fore.GREEN + "Incoming Call..." + Style.RESET_ALL)
                                     input(Fore.GREEN + "> " + Style.RESET_ALL)
                                     code_shatter_call()
-
-                                shop()
+                                    shop()
+                                else:
+                                    clear_terminal()
+                                    shop()
                             else:
                                 print_slow(
                                     Fore.RED + "You don't have enough money to buy this upgrade." + Style.RESET_ALL)
-                            break
+                                time.sleep(1)
+                                clear_terminal()
+                                shop()
                     else:
                         print_slow(Fore.RED + "Invalid choice, please try again." + Style.RESET_ALL)
-
+                        time.sleep(1)
+                        clear_terminal()
+                        shop()
             else:
                 for upgrade in upgrades:
                     if upgrade_name.lower() == upgrade['name'].lower():
@@ -444,8 +448,16 @@ def shop():
                             time.sleep(2)
                             clear_terminal()
                             shop()
+                        else:
+                            print_slow(
+                                Fore.RED + "You don't have enough money to buy this upgrade." + Style.RESET_ALL)
+                            shop()
+
         else:
             print_slow(Fore.RED + "Invalid choice, please try again." + Style.RESET_ALL)
+            time.sleep(1)
+            clear_terminal()
+            shop()
 
 
 # Function to start the game
@@ -558,6 +570,7 @@ def hack(system_name):
         if system['level'] <= player_level:
             # Check for CodeShatter before prompting for password
             if system['name'] == 'Markus' and has_item("CodeShatter"):
+                clear_terminal()
                 code_shatter_minigame()
                 print_slow("Password Cracked: 735@&!//")
                 input("Press [Enter] to continue")
@@ -620,6 +633,9 @@ def read_email(emails, subject):
                     print_slow("")
                     print_slow(Fore.GREEN + "Evidence Secured" + Style.RESET_ALL)
                     add_evidence(evidence_item)
+                    print_slow("")
+                    print_slow("")
+                    time.sleep(3)
                     print_slow(Fore.GREEN + "Incoming Call..." + Style.RESET_ALL)
                     input(Fore.GREEN + "> " + Style.RESET_ALL)
                     third_call()
@@ -631,6 +647,9 @@ def read_email(emails, subject):
                     print_slow("")
                     print_slow(Fore.GREEN + "Evidence Secured" + Style.RESET_ALL)
                     add_evidence(evidence_item)
+                    print_slow("")
+                    print_slow("")
+                    time.sleep(3)
                     print_slow(Fore.GREEN + "Incoming Call..." + Style.RESET_ALL)
                     input(Fore.GREEN + "> " + Style.RESET_ALL)
                     second_call()
@@ -640,9 +659,11 @@ def read_email(emails, subject):
                 if not has_evidence(evidence_item):
                     print_slow("Adding evidence to the list...")
                     print_slow("")
-                    print_slow("")
                     print_slow(Fore.GREEN + "Evidence Secured" + Style.RESET_ALL)
                     add_evidence(evidence_item)
+                    print_slow("")
+                    print_slow("")
+                    time.sleep(3)
                     print_slow(Fore.GREEN + "Incoming Call..." + Style.RESET_ALL)
                     input(Fore.GREEN + "> " + Style.RESET_ALL)
                     first_call()
@@ -651,9 +672,14 @@ def read_email(emails, subject):
                 if not has_evidence(evidence_item):
                     print_slow("Adding evidence to the list...")
                     print_slow("")
-                    print_slow("")
                     print_slow(Fore.GREEN + "Evidence Secured" + Style.RESET_ALL)
                     add_evidence(evidence_item)
+                    print_slow("")
+                    print_slow("")
+                    time.sleep(3)
+                    print_slow(Fore.GREEN + "Incoming Call..." + Style.RESET_ALL)
+                    input(Fore.GREEN + "> " + Style.RESET_ALL)
+                    sixth_call()
 
                     # Add money to balance based on the email subject
             if email['subject'].lower() == "professional development":
@@ -709,12 +735,13 @@ def connect():
                 connect_help()
             # Exit the network
             elif command.lower() == "exit":
-                print_slow("Disconnecting...")
+                print_slow("Disconnecting from EnigmaLink...")
                 time.sleep(2)
                 print_slow("")
                 print_slow("Connection terminated.")
                 print_slow("")
-                break
+                time.sleep(1)
+                main()
             else:
                 print_slow("Invalid command, please try again.")
     else:
@@ -737,6 +764,8 @@ def mail():
             # Read email
             subject = command[2:]
             read_email(emails, subject)
+        elif command.lower() == 'clear':
+            clear_terminal()
         elif command.lower() == 'help':
             # Display mail help message
             mail_help()
@@ -744,6 +773,7 @@ def mail():
             # Exit mail system
             print_slow(Fore.LIGHTBLUE_EX + "\nExiting Mail System..." + Style.RESET_ALL)
             print_slow("")
+            time.sleep(1)
             start_game()
         else:
             print_slow(Fore.RED + "\nInvalid command, please try again." + Style.RESET_ALL)

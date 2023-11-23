@@ -1,6 +1,8 @@
 import random
+import time
+
 from colorama import Fore, Style
-from components.common_functions import print_slow
+from components.common_functions import print_slow, clear_terminal
 
 
 def code_shatter_minigame():
@@ -50,3 +52,9 @@ def code_shatter_minigame():
             break
     else:
         print_slow(Fore.RED + "Access denied. Too many attempts." + Style.RESET_ALL)
+        time.sleep(1)
+        print_slow("")
+        print_slow(Fore.RED + "Rebooting CodeShatter with new proxy..." + Style.RESET_ALL)
+        print("")
+        clear_terminal()
+        code_shatter_minigame()
