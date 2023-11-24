@@ -398,7 +398,8 @@ def shop():
         elif command.lower() == 'help':
             shop_help()
         elif command.lower().startswith('buy '):
-            upgrade_name = command[4:]
+            upgrade_name = command[4:] 
+            # [4:] removes first 4 characters 
             if has_item('EnigmaLink'):
                 if upgrade_name.lower() == 'enigmalink':
                     print_slow("")
