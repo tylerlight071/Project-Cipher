@@ -9,11 +9,14 @@ from colorama import Fore, Style
 
 from components.common_functions import clear_terminal, print_slow, shop_help, help_user, connect_help, mail_help, \
     system_help
-from conversations.calls import intro_call, first_call, second_call, third_call, fourth_call, fifth_call, sixth_call
+from conversations.calls import intro_call, first_call, second_call, third_call, fourth_call, fifth_call, sixth_call, \
+    markus_seen_call
 from conversations.minigame_calls import code_shatter_call
 from minigames.code_shatter_minigame import code_shatter_minigame
+from minigames.eye_spy_minigame import port_scanning
 from systems.level_1.amy.amy_system import AmySystem
 from systems.level_1.billy.billy_system import BillySystem
+from systems.level_1.cameras.camera_1 import camera_first
 from systems.level_1.markus.markus_system import MarkusSystem
 
 # Set the PYGAME_HIDE_SUPPORT_PROMPT environment variable
@@ -37,6 +40,7 @@ emails = []
 has_read_email = False
 has_read_file = False
 has_intro_call = False
+seen_markus = False
 evidence = []
 amy_system = AmySystem()
 billy_system = BillySystem()
@@ -48,20 +52,20 @@ has_started_game = False
 
 # Save the game state to a file
 def save_game():
-    global inventory, balance, emails, has_read_email, evidence, player_level, has_intro_call, has_started_game  # Add has_read_email here
+    global inventory, balance, emails, has_read_email, evidence, player_level, has_intro_call, has_started_game, seen_markus
     with open('savegame.pkl', 'wb') as f:
         pickle.dump(
-            (inventory, balance, emails, has_read_email, evidence, player_level, has_intro_call, has_started_game),
+            (inventory, balance, emails, has_read_email, evidence, player_level, has_intro_call, has_started_game, seen_markus),
             f)
 
     # Load the game state from a file
 
 
 def load_game():
-    global inventory, balance, emails, has_read_email, evidence, player_level, has_intro_call, has_started_game
+    global inventory, balance, emails, has_read_email, evidence, player_level, has_intro_call, has_started_game, seen_markus
     if os.path.exists('savegame.pkl'):
         with open('savegame.pkl', 'rb') as f:
-            inventory, balance, emails, has_read_email, evidence, player_level, has_intro_call, has_started_game = pickle.load(
+            inventory, balance, emails, has_read_email, evidence, player_level, has_intro_call, has_started_game, seen_markus = pickle.load(
                 f)
     else:
         # If the savegame file doesn't exist, set the default values
@@ -70,6 +74,7 @@ def load_game():
         evidence = []
         has_intro_call = False
         has_started_game = False
+        seen_markus = False
         balance = 30000
         emails = [
             {
@@ -189,7 +194,7 @@ def game_settings():
                 time.sleep(1)
                 clear_terminal()
                 game_settings()
-    elif choice.lower() == "exit" or choice.lower() == "back to main menu":
+    elif choice.lower() == "back" or choice.lower() == "back to main menu":
         # Return to Main Menu
         print_slow(Fore.GREEN + "\nReturning to Main Menu..." + Style.RESET_ALL)
         time.sleep(1)
@@ -463,7 +468,7 @@ def shop():
 
 # Function to start the game
 def start_game():
-    global has_intro_call, has_started_game
+    global has_intro_call, has_started_game, seen_markus
 
     if has_intro_call:
         clear_terminal()
@@ -482,7 +487,12 @@ def start_game():
         has_started_game = True
         print_slow(Fore.MAGENTA + "\nHint:  Type 'help' to get a list of available commands." + Style.RESET_ALL)
         pass
-
+    if seen_markus:
+        print_slow(Fore.GREEN + "Incoming Call..." + Style.RESET_ALL)
+        input(Fore.GREEN + "> " + Style.RESET_ALL)
+        markus_seen_call()
+    else:
+        pass
     # Game command loop
     command = input(Fore.GREEN + "> " + Style.RESET_ALL)
 
@@ -495,8 +505,6 @@ def start_game():
     # Display help message
     elif command.lower() == "help":
         help_user()
-    elif command.lower() == "remove":
-        remove_from_inventory(item="CodeShatter")
     # Check balance
     elif command.lower() == "balance":
         print_balance()
@@ -526,11 +534,6 @@ def has_item(item):
     return item in inventory
 
 
-def show_items():
-    global inventory
-    print_slow(inventory)
-
-
 def scan():
     print_slow("")
     print_slow(Fore.YELLOW + "Scanning network..." + Style.RESET_ALL)
@@ -540,7 +543,7 @@ def scan():
     print_slow(Fore.YELLOW + "\nAvailable Systems:" + Style.RESET_ALL)
     print_slow("")
     for system in all_systems:
-        if system['level'] <= player_level:
+        if system['level'] == player_level:
             print_slow("")
             print_slow(f"{system['name']} ({system['type']})")
             print_slow("")
@@ -565,10 +568,11 @@ def getpass_star(prompt="Password: "):
 
 
 def hack(system_name):
+    global seen_markus
     # Find the system in the all_systems list
     system = next((s for s in all_systems if s['name'].lower() == system_name.lower()), None)
     if system:
-        if system['level'] <= player_level:
+        if system['level'] == player_level:
             # Check for CodeShatter before prompting for password
             if system['name'] == 'Markus' and has_item("CodeShatter"):
                 clear_terminal()
@@ -579,6 +583,10 @@ def hack(system_name):
                 markus_system_command_loop(markus_system)
                 add_level(player_level)
                 remove_from_inventory(item="CodeShatter")
+                seen_markus = True
+            elif system['name'] == 'Lobby Camera' and has_item("EyeSpy"):
+                port_scanning()
+                camera_first()
             else:
                 # Prompt the user for the password
                 print_slow("")
@@ -594,6 +602,9 @@ def hack(system_name):
                     elif system['name'] == 'Markus':
                         markus_system_command_loop(markus_system)
                         add_level(player_level)
+                        seen_markus = True
+                    elif system['name'] == 'Lobby Camera':
+                        camera_first()
                     else:
                         # Add more conditions for other systems
                         pass
@@ -787,8 +798,8 @@ all_systems = [
     {"name": "Amy", "type": "Computer", "level": 1, "password": "sexinthecity"},
     {"name": "Markus", "type": "Computer", "level": 1, "password": "735@&!//"},
     {"name": "Billy", "type": "Computer", "level": 1, "password": "football"},
-    {"name": "Camera1", "type": "Camera", "level": 2, "password": "camera1"},
-    {"name": "Camera2", "type": "Camera", "level": 2, "password": "camera2"},
+    {"name": "Lobby Camera", "type": "Camera", "level": 2, "password": "camera1"},
+    {"name": "Camera2", "type": "Camera", "level": 3, "password": "camera2"},
     {"name": "Server", "type": "Computer", "level": 3, "password": "server123"}
 ]
 
@@ -918,6 +929,7 @@ def markus_system_command_loop(system):
 
         if command.lower() == "l":
             system.list_files()
+            print_slow("")
         elif command.lower().startswith("r "):
             file_name = command[2:]
             file_content = system.read_file(file_name)  # Store the file content in a variable

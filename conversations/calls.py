@@ -339,3 +339,7 @@ def fifth_call():
 
 def sixth_call():
     print_slow("ADD CALL STUFF HERE")
+
+
+def markus_seen_call():
+    print_slow("Something goes here")

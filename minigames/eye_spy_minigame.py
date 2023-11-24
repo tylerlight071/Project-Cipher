@@ -1,6 +1,8 @@
 import random
+import time
+
 from colorama import Fore, Style
-from components.common_functions import print_slow
+from components.common_functions import print_slow, clear_terminal
 
 
 def generate_ports(num_ports):
@@ -56,9 +58,15 @@ def port_scanning():
     if len(open_ports) == 0:
         print_slow(
             Fore.GREEN + "\nCongratulations! You have successfully found all the open ports and gained access to the camera." + Style.RESET_ALL)
+        time.sleep(2)
+        clear_terminal()
     else:
         print_slow(
-            Fore.RED + f"\nGame Over! You found {correct_guesses} out of {len(open_ports) + correct_guesses} open ports." + Style.RESET_ALL)
+            Fore.RED + f"\nHack Failed! You found {correct_guesses} out of {len(open_ports) + correct_guesses} open ports." + Style.RESET_ALL)
+        time.sleep(1)
+        clear_terminal()
+        port_scanning()
 
 
-port_scanning()
+
+
