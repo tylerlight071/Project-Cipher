@@ -587,6 +587,7 @@ def hack(system_name):
                 seen_markus = True
             elif system['name'] == 'Lobby Camera' and has_item("EyeSpy"):
                 port_scanning()
+                add_level(player_level)
                 camera_first()
             else:
                 # Prompt the user for the password
@@ -606,6 +607,8 @@ def hack(system_name):
                         seen_markus = True
                     elif system['name'] == 'Lobby Camera':
                         camera_first()
+                    elif system['name'] == 'Kyle':
+                        # Implement Kyle System
                     else:
                         # Add more conditions for other systems
                         pass
@@ -615,7 +618,7 @@ def hack(system_name):
 
         else:
             print_slow("")
-            print_slow(Fore.RED + "Access denied! This system is locked." + Style.RESET_ALL)
+            print_slow(Fore.RED + "System not found! Please try again." + Style.RESET_ALL)
     else:
         print_slow("")
         print_slow(Fore.RED + "System not found! Please try again." + Style.RESET_ALL)
@@ -800,8 +803,9 @@ all_systems = [
     {"name": "Markus", "type": "Computer", "level": 1, "password": "735@&!//"},
     {"name": "Billy", "type": "Computer", "level": 1, "password": "football"},
     {"name": "Lobby Camera", "type": "Camera", "level": 2, "password": "camera1"},
-    {"name": "Camera2", "type": "Camera", "level": 3, "password": "camera2"},
-    {"name": "Server", "type": "Computer", "level": 3, "password": "server123"}
+    {"name": "Kyle", "type": "Computer", "level": 3, "password": "12345"},
+    {"name": "Camera2", "type": "Camera", "level": 4, "password": "camera2"},
+    {"name": "Server", "type": "Computer", "level": 5, "password": "server123"}
 ]
 
 
